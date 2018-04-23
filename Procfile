@@ -1,1 +1,0 @@
-web: java -jar target/User_control.jar
