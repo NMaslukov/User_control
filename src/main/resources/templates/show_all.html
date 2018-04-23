@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User control</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/css/all.css"/>
+
+
+
+
+</head>
+
+<body>
+
+<b> Add person to database</b>:<br><br>
+ <div id = "addPerson">
+<form action="#" th:action="@{/web/addNewPerson}" th:object="${new_person}" method="post">
+Name: <input type="text" th:field="*{name}"/><label th:if="${#fields.hasErrors('name')}" th:text="#{error.person.name}"></label><br>
+Surname: <input type="text" th:field="*{surname}"/><br>
+Role: <input type="text" th:field="*{role}"/><br>
+Age: <input type="text" th:field="*{age}"/><br>
+Login: <input type="text" th:field="*{login}"/><br>
+Password <input type="password" th:field="*{password}"/><br>
+
+<input type = "submit" value="Add"/>
+</form>
+</div>
+<br>
+<br>
+<br>
+<div ng-app="myApp" ng-controller="customersCtrl"> 
+<form action="#" th:action="@{/web/updateExistingPerson}" th:object="${update_person}" method="post">
+Input the id for <b>Update</b> existing person: <input type ="text" class ="idd" th:field="*{id}" ng-keyup="execute()" ng-model="value"> 
+<label th:if="${#fields.hasErrors('name')}" th:text="#{error.person.name}"></label>
+<div id = "hide"  ng-show="person_data_byid">
+Name: <input type = "text" id="label_name" th:field="*{name}" ng-model="name"/><br>
+Surname:  <input type = "text" id="label_surname" th:field="*{surname}" ng-model="surname"><br>
+Role:  <input type = "text"  id="label_role" th:field="*{role}" ng-model="role"><br>
+Age:  <input type = "text"  id="label_age" th:field="*{age}" ng-model="age"><br>
+Login: <input type = "text"  id="label_login" th:field="*{login}" ng-model="login"><br>
+Password  <input type = "text"  id="label_password" th:field="*{password}" ng-model="password"><br>
+<input type = "submit"/>
+</div>
+</form>
+</div>
+<br>
+<br>
+<form action="#" th:action="@{/web/deletePerson}"  method="post">
+Input the id and press Enter for <b>Delete </b> existing person: <input class ="idd" type ="number" name ="id_delete" /> 
+</form>
+<br>
+<br>
+<table>
+<tbody>
+ <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Surname</th>
+    <th>Age</th>
+    <th>Role</th>
+    <th>Login</th>
+    <th>Passoword</th>
+  </tr>
+    <tr th:each="person: ${persons}">
+    <td th:text = ${person.id}/>
+    <td th:text = ${person.name}/>
+    <td th:text = ${person.surname}/>
+    <td th:text = ${person.age}/>
+    <td th:text = ${person.login}/>
+    <td th:text = ${person.password}/>
+    <td th:text = ${person.role}/>
+	<tr/>
+</tbody>
+</table>
+<br>
+
+ <center><a href = "http://localhost:8080/logout"><input id = "Sign_Out" type="submit" value="Sign Out"/></a></center>
+
+<script src = "/js/all.js"></script>
+
+</body>
+</html>
