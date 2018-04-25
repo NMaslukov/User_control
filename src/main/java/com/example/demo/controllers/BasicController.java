@@ -67,7 +67,7 @@ public class BasicController {
 		model.addAttribute(ATR_NOT_AUTHORIZE, not_authorized);
 		model.addAttribute(RedirectFilter.TARGET_URL, target_url);
 		
-		return "login";//test
+		return MAPPING_LOGIN;//test
 	}
 
 	@PostMapping(MAPPING_LOGIN)

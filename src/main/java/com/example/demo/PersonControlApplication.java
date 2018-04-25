@@ -12,7 +12,7 @@ import com.example.demo.entity.Person;
 @SpringBootApplication
 @EnableCaching
 public class PersonControlApplication implements CommandLineRunner {
-
+	//try later <package>war</package>
 	@Autowired
 	DaoAccesRepo accesRepo;
 	
