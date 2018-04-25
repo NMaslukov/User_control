@@ -28,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static final String REST = "/rest/**";
 
 	public final String[] role_admin = {"ROLE_ADMIN"};
-	public final String[] role_adm_user = {"ROLE_ADMIN","ROLE_USER"};
 	private final Map<String,String[]> access = new HashMap<>();
 	
 	public SecurityConfig() throws InterruptedException { // beta version, fix later

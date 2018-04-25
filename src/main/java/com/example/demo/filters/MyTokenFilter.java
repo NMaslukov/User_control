@@ -19,7 +19,6 @@ public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 	 * If null was returned, filter will be sent redirect to login page.
 	 */
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-		System.out.println("MyTokenFilter");
 		String token = findTokenInCookie(request.getCookies());
 		
 		return token;
