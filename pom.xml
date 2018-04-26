@@ -5,7 +5,7 @@
 	<groupId>com.user.control.group</groupId>
 	<artifactId>User_control</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging> 
+	<packaging>jar</packaging> 
 	<name>User_control</name>
 	<description>Demo project for Spring Boot</description>
 
