@@ -18,8 +18,7 @@ public class PersonControlApplication implements CommandLineRunner {
 	
 	public static void main(String[] args) throws InterruptedException {
 		SpringApplication.run(PersonControlApplication.class, args);
-		System.out.println("START GG");
-		Thread.sleep(3000);
+
 	}
 
 	@Override

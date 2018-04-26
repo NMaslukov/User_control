@@ -6,7 +6,7 @@ app.controller('customersCtrl', function($scope, $http, $window) {
     if($scope.value != ""){
 	   $scope.person_data_byid = true;
 
-		$http.get("http://localhost:8080/rest/getById/" + $scope.value).then(function (response) {
+		$http.get("/rest/getById/" + $scope.value).then(function (response) {
 			$scope.name = response.data.name;
 			$scope.surname = response.data.surname;
 			$scope.role = response.data.role;

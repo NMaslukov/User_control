@@ -58,7 +58,8 @@ public class BasicController {
 			@RequestParam(value = ATR_NOT_AUTHORIZE, required = false) String not_authorized,
 			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url,
 			Model model) {
-		//fi4a
+		
+		//fix "/" problem
 		if(target_url != null && target_url.length() != 0 && String.valueOf(target_url.charAt(target_url.length() - 1)).equals("/") )
 		target_url = target_url.substring(0, target_url.length()-1);
 		
@@ -77,10 +78,10 @@ public class BasicController {
 		
 		if(verify_log_pass(response, password, login)) {
 			
-				if(target_url != null)
+				if(target_url.length() != 0 && target_url != null)
 				return BasicController.MAPPING_REDIRECT + target_url;
 			
-			return MAPPING_REDIRECT_WEB + MAPPING_ALL_PERSONS;
+			return MAPPING_REDIRECT + "/";
 		}
 		
 		return MAPPING_REDIRECT +  MAPPING_LOGIN + PARAM_ERROR + RedirectFilter.TARGET_URL_PARAM +target_url;
