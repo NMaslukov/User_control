@@ -40,6 +40,8 @@ public class BasicController {
 	public static final String PARAM_PASSWORD = "password";
 	public static final String PARAM_USERNAME = "username";
 	
+	public static final String VIEW_LOGIN = "login";
+
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
 
 	@Autowired
@@ -68,7 +70,7 @@ public class BasicController {
 		model.addAttribute(ATR_NOT_AUTHORIZE, not_authorized);
 		model.addAttribute(RedirectFilter.TARGET_URL, target_url);
 		
-		return MAPPING_LOGIN;//test
+		return VIEW_LOGIN;//test
 	}
 
 	@PostMapping(MAPPING_LOGIN)
