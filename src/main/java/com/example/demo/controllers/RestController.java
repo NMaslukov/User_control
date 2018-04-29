@@ -64,4 +64,11 @@ public class RestController {
 	public Integer getAgeById(@PathVariable("id") Integer id) {
 		return service.getById(id).getAge();
 	}
+
+
+
+	public Object increment(String anyString) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
