@@ -28,7 +28,7 @@ public class BasicController {
 	
 	@GetMapping("/")
 	public String hello() {
-		
+		logger.info("MAPPINT README");
 		return "readme";
 	}
 	

@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>Readme</title>
+ <style type="text/css">
+   #readme { 
+   color: #000000;
+    padding: 5px;
+    font-size: 17px;
+    
+   }
+  </style>
 </head>
 <body>
+<div id = "readme">
 <a href = "/login">Login page</a>. After successful authentication u'll get a token with some authority(role).
 <br>
 With login and password: <b>admin</b> u'll get ADMIN authority.<br>
@@ -12,8 +21,8 @@ With login and password: <b>user</b> u'll get USER authority.<br>
 <br>
 For access <a href="/web/allPersons">control page</a>, u should have ADMIN authority.
 <br>
-For access <a href="/web/hello">simple hello page</a>, u should have any authority.
+For access <a href="/web/hello">simple hello page</a>, u should have USER/ADMIN authority.
 <br>
-
+</div>
 </body>
 </html>

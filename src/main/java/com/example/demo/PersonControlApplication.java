@@ -18,7 +18,6 @@ public class PersonControlApplication implements CommandLineRunner {
 	
 	public static void main(String[] args) throws InterruptedException {
 		SpringApplication.run(PersonControlApplication.class, args);
-
 	}
 
 	@Override
