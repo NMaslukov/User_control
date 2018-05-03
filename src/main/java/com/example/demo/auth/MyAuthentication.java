@@ -14,13 +14,11 @@ public class MyAuthentication implements Authentication {
 	private final MyUserDetails userDetails;
 	private boolean isAuthenticated;
 
-
 	public MyAuthentication(MyUserDetails userDetails) {
 		this.userDetails = userDetails;
 		isAuthenticated = true;
 	}
 
-	
 	@Override
 	public String getName() {
 		return userDetails.getUsername();

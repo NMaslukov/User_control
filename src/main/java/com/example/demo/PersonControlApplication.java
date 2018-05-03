@@ -25,7 +25,7 @@ public class PersonControlApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		accesRepo.save(new Person(0, "admin", "admin", 1, "ROLE_ADMIN", "admin", "admin"));
 		accesRepo.save(new Person(0, "user", "user", 2, "ROLE_USER", "user", "user"));
-		accesRepo.save(new Person(0, "test", "DWAWDA", 22, "ROLE_USER", "DWAWDA", "DWAWDA"));
+		accesRepo.save(new Person(0, "test", "test", 22, "ROLE_USER", "test", "test"));
 	}
 
 

@@ -35,4 +35,6 @@ public interface CV {
 	public static final String OBJ_PERSONS 		 = "persons";
 	public static final String OBJ_NEW_PERSON	 = "new_person";
 	public static final String OBJ_UPDATE_PERSON = "update_person";
+	
+	public static final String REDIRECT_WEB_ALL_PERSONS = "redirect:/web/allPersons";
 }

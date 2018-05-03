@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,7 +27,7 @@ public class WebController {
 	private JpaService service;
 
 	@GetMapping(CV.MAPPING_ALL_PERSONS)
-	public ModelAndView allPersons( Authentication authentication) {
+	public ModelAndView allPersons() {
 		
 		ModelAndView m = new ModelAndView(CV.VIEW_SHOW_ALL);
 		m.addObject(CV.OBJ_PERSONS, service.selectAndGroupById());
@@ -48,7 +47,7 @@ public class WebController {
 		}
 		service.save(p);
 		
-		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
+		return CV.REDIRECT_WEB_ALL_PERSONS;
 	}
 
 
@@ -61,13 +60,13 @@ public class WebController {
 		}
 		service.updatePerson(p);
 
-		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
+		return CV.REDIRECT_WEB_ALL_PERSONS;
 	}
 
 	@PostMapping(CV.MAPPING_DELETE_PERSON)
 	public String deletePerson(@RequestParam(CV.PARAM_ID_DELETE) Integer id) {
 		service.deletePersonById(id);
-		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
+		return CV.REDIRECT_WEB_ALL_PERSONS;
 	}
 
 	@GetMapping(CV.MAPPING_HELLO)
