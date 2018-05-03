@@ -29,9 +29,9 @@ public class RedirectFilter extends GenericFilterBean {
 		HttpServletRequest request = (HttpServletRequest) servlet_request;
 
 		if(SecurityContextHolder.getContext().getAuthentication() == null) {
-			response.sendRedirect(REDIRECT_URL_NOT_AUTH + TARGET_URL_PARAM + request.getRequestURI());
+			response.sendRedirect(CV.MAPPING_LOGIN_NOT_AUTHORIZED_TARGET_URL + request.getRequestURI());
 			response.setStatus(MyTokenFilter.RESPONSE_CODE);
-			logger.debug("Not authenticated. Sent redirect to " + REDIRECT_URL_NOT_AUTH);
+			logger.debug("Not authenticated. Sent redirect to login page");
 			return;
 		}
 		

@@ -65,42 +65,44 @@ public class BasicController {
 			@RequestParam(CV.PARAM_USERNAME) String login,
 			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url) {
 		
-		if(isLogPassValid(response, password, login)) {
-			
-				if(target_url.length() != 0 && target_url != null)
+		if(isLogPassValid(password, login)) {
+			setToken(response, service.getPersonByLogin(login));
+				if(isTargetUrlPresent(target_url))
 				return CV.MAPPING_REDIRECT + target_url;
-			
+				else
 			return CV.MAPPING_REDIRECT + "/";
 		}
 		
-		return CV.MAPPING_REDIRECT +  CV.MAPPING_LOGIN + CV.PARAM_ERROR + RedirectFilter.TARGET_URL_PARAM +target_url;
+		return CV.MAPPING_REDIRECT_LOGIN_ERROR_URL + target_url;
 	}
-	
+
+	private boolean isTargetUrlPresent(String target_url) {
+		return target_url.length() != 0 && target_url != null;
+	}
 	
 	@GetMapping(CV.MAPPING_LOGOUT)
 	public String logout(HttpServletRequest request,HttpServletResponse response) {
-		
-		Cookie cookie = new Cookie(TokenService.TOKEN_NAME, "");
+		deleteToken(request, response);
+		return CV.REDIRECT_LOGIN;
+	}
+
+	private void deleteToken(HttpServletRequest request, HttpServletResponse response) {
+		Cookie cookie = new Cookie(TokenService.TOKEN_NAME, null);
         cookie.setMaxAge(0); 
-        cookie.setPath(request.getContextPath() + "/");
+        cookie.setPath("/");
         response.addCookie(cookie);
-		return CV.MAPPING_REDIRECT + CV.MAPPING_LOGIN;
 	}
 	
-	public boolean isLogPassValid(HttpServletResponse response, String password, String login) {
+	public boolean isLogPassValid(String password, String login) {
 		Person person = service.getPersonByLogin(login);
-		try {
-			if(person != null && password.equals(person.getPassword())){
-			String token = TokenService.createJWT(person.getId(), TokenService.EXPIRATION_TIME);
-			Cookie c = new Cookie(TokenService.TOKEN_NAME, token);
-			c.setPath("/"); 
-			response.addCookie(c);
+		return (person != null && password.equals(person.getPassword()));
 
-			return true;
-			}
-		}catch(Exception e) {
-			logger.debug(e.getMessage());
-		}
-		return false;
+	}
+
+	private void setToken(HttpServletResponse response, Person person) {
+		String token = TokenService.createJWT(person.getId(), TokenService.EXPIRATION_TIME);
+		Cookie c = new Cookie(TokenService.TOKEN_NAME, token);
+		c.setPath("/"); 
+		response.addCookie(c);
 	}
 }

@@ -13,14 +13,18 @@ public interface CV {
 	public static final String PARAM_ID_DELETE = "id_delete";
 
 	
-	public static final String MAPPING_ALL_PERSONS = "/allPersons";
 	public static final String MAPPING_REDIRECT_WEB = "redirect:/web";
 	public static final String MAPPING_REDIRECT = "redirect:";
+	public static final String MAPPING_ALL_PERSONS = "/allPersons";
 	public static final String MAPPING_REDIRECT_TO_HELLO = "redirect:/web/hello";
 	public static final String MAPPING_UPDATE_EXISTING_PERSON = "/updateExistingPerson";
 	public static final String MAPPING_DELETE_PERSON = "/deletePerson";
 	public static final String MAPPING_ADD_PERSON = "/addNewPerson";
 	public static final String MAPPING_HELLO = "/hello";
+	public static final String MAPPING_REDIRECT_WEB_ALL_PERSONS = "redirect:/web/allPersons";
+	public static final String MAPPING_REDIRECT_LOGIN = "redirect:/login";
+	public static final String MAPPING_REDIRECT_LOGIN_ERROR_URL = "redirect:/login?error&TARGET_URL=";
+	public static final String MAPPING_LOGIN_NOT_AUTHORIZED_TARGET_URL	= "/login?not_authorized&TARGET_URL=";
 	
 	public static final String PARAM_ERROR 			= "?error";
 	public static final String PARAM_NOT_RESPECTED  = "?no_authority";
@@ -37,4 +41,9 @@ public interface CV {
 	public static final String OBJ_UPDATE_PERSON = "update_person";
 	
 	public static final String REDIRECT_WEB_ALL_PERSONS = "redirect:/web/allPersons";
+	public static final String REDIRECT_LOGIN = "redirect:/login";
+	public static final String REDIRECT_LOGIN_ERROR_URL = "redirect:/login?error&TARGET_URL=";
+	public static final String LOGIN_NOT_AUTHORIZED_TARGET_URL	= "/login?not_authorized&TARGET_URL=";
+	
+	
 }

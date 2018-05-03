@@ -47,7 +47,7 @@ public class WebController {
 		}
 		service.save(p);
 		
-		return CV.REDIRECT_WEB_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB_ALL_PERSONS;
 	}
 
 
@@ -60,13 +60,13 @@ public class WebController {
 		}
 		service.updatePerson(p);
 
-		return CV.REDIRECT_WEB_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB_ALL_PERSONS;
 	}
 
 	@PostMapping(CV.MAPPING_DELETE_PERSON)
 	public String deletePerson(@RequestParam(CV.PARAM_ID_DELETE) Integer id) {
 		service.deletePersonById(id);
-		return CV.REDIRECT_WEB_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB_ALL_PERSONS;
 	}
 
 	@GetMapping(CV.MAPPING_HELLO)

@@ -25,37 +25,38 @@ import com.example.demo.controllers.CV;
 public class RoleFilter extends GenericFilterBean {
 	public static final Logger logger = LoggerFactory.getLogger(RoleFilter.class);
 
-	private final Map<String,String[]> access;
-
+	private final Map<String,String[]> UrlRoleMap;
+	
+	private String[] ROLES;
 	
 	public RoleFilter(Map<String,String[]> access){
 	
-		this.access = access;
+		this.UrlRoleMap = access;
 	}
 	
 	private final String REDIRECT_URL =  CV.MAPPING_LOGIN + CV.PARAM_NOT_RESPECTED;
 
 	
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		HttpServletResponse response = (HttpServletResponse)resp;
-		HttpServletRequest request = (HttpServletRequest) req;
-		String key = normalizeUrl(request.getRequestURI());
-		String[] ROLES = access.get(key);
-		
-		if(ROLES != null && response.getStatus() != MyTokenFilter.RESPONSE_CODE)
-				sendRedirectIfNotAllowed(authentication, ROLES);
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {		
+		if(isNeedCheck())
+		sendRedirectIfNotAllowed(SecurityContextHolder.getContext().getAuthentication(), ROLES);
 		
 		chain.doFilter(request, response);
 	}
+
+
+	private boolean isNeedCheck() {
+		 String key = normalizeUrl(getRequest().getRequestURI());
+	     ROLES = UrlRoleMap.get(key);
+		 return ROLES != null && getResponse().getStatus() != MyTokenFilter.RESPONSE_CODE;
+	} 
 
 
 	private void sendRedirectIfNotAllowed(Authentication authentication, String[] ROLES) throws IOException {
 		for (String ROLE : ROLES) 
 			if(!hasRole(authentication, ROLE))
 				sendRedirect();
-				
 	}
 
 
