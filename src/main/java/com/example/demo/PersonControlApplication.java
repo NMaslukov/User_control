@@ -12,7 +12,7 @@ import com.example.demo.entity.Person;
 @SpringBootApplication
 @EnableCaching
 public class PersonControlApplication implements CommandLineRunner {
-	//try later <package>war</package>
+
 	@Autowired
 	DaoAccesRepo accesRepo;
 	
@@ -26,7 +26,6 @@ public class PersonControlApplication implements CommandLineRunner {
 		accesRepo.save(new Person(0, "admin", "admin", 1, "ROLE_ADMIN", "admin", "admin"));
 		accesRepo.save(new Person(0, "user", "user", 2, "ROLE_USER", "user", "user"));
 		accesRepo.save(new Person(0, "test", "DWAWDA", 22, "ROLE_USER", "DWAWDA", "DWAWDA"));
-		
 	}
 
 

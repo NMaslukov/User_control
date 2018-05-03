@@ -1,8 +1,5 @@
 package com.example.demo;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,7 +24,6 @@ public class WebControllerTest {
 	
 	@Test
 	public void rest_test() {
-		when(rest.increment(anyString())).thenReturn(1);
 		
 	}
 	

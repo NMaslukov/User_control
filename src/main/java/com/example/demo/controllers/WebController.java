@@ -20,83 +20,60 @@ import com.example.demo.entity.Person;
 import com.example.demo.services.JpaService;
 
 @Controller
-@RequestMapping(BasicController.WEB)
+@RequestMapping(CV.WEB)
 public class WebController {
 	public static final Logger logger = LoggerFactory.getLogger(WebController.class);
 
-	public static final String MAPPING_UPDATE_EXISTING_PERSON = "/updateExistingPerson";
-	public static final String MAPPING_DELETE_PERSON = "/deletePerson";
-	public static final String MAPPING_ADD_PERSON = "/addNewPerson";
-	public static final String MAPPING_HELLO = "/hello";
-
-	public static final String OBJ_PERSONS = "persons";
-	public static final String OBJ_NEW_PERSON = "new_person";
-	public static final String OBJ_UPDATE_PERSON = "update_person";
-	
-	public static final String VIEW_SHOW_ALL = "show_all";
-	public static final String VIEW_HELLO = "Hello";
-	
-
-
-	
 	@Autowired
 	private JpaService service;
 
-	@GetMapping(BasicController.MAPPING_ALL_PERSONS)
+	@GetMapping(CV.MAPPING_ALL_PERSONS)
 	public ModelAndView allPersons( Authentication authentication) {
 		
-		ModelAndView m = new ModelAndView(VIEW_SHOW_ALL);
-
-		m.addObject(OBJ_PERSONS, service.selectAndGroupById());
-		m.addObject(OBJ_NEW_PERSON, new Person());
-		m.addObject(OBJ_UPDATE_PERSON, new Person());
+		ModelAndView m = new ModelAndView(CV.VIEW_SHOW_ALL);
+		m.addObject(CV.OBJ_PERSONS, service.selectAndGroupById());
+		m.addObject(CV.OBJ_NEW_PERSON, new Person());
+		m.addObject(CV.OBJ_UPDATE_PERSON, new Person());
 
 		return m;
 	}
 
 
-	@PostMapping(MAPPING_ADD_PERSON)
-	public String addNewPerson(@Valid @ModelAttribute(OBJ_NEW_PERSON) Person p, BindingResult br, Model model) {
+	@PostMapping(CV.MAPPING_ADD_PERSON)
+	public String addNewPerson(@Valid @ModelAttribute(CV.OBJ_NEW_PERSON) Person p, BindingResult br, Model model) {
 		if (br.hasErrors()) {
-			Iterable<Person> all = service.selectAndGroupById();
-			model.addAttribute(OBJ_PERSONS, all);
-			model.addAttribute(OBJ_UPDATE_PERSON, new Person());
-			
-			return VIEW_SHOW_ALL;
+			model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
+			model.addAttribute(CV.OBJ_UPDATE_PERSON, new Person());
+			return CV.VIEW_SHOW_ALL;
 		}
-		
 		service.save(p);
 		
-		return BasicController.MAPPING_REDIRECT_WEB + BasicController.MAPPING_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
 	}
 
 
-	@PostMapping(MAPPING_UPDATE_EXISTING_PERSON)
-	public String updateExistingPerson(@Valid @ModelAttribute(OBJ_UPDATE_PERSON) Person p, BindingResult br, Model model) {
+	@PostMapping(CV.MAPPING_UPDATE_EXISTING_PERSON)
+	public String updateExistingPerson(@Valid @ModelAttribute(CV.OBJ_UPDATE_PERSON) Person p, BindingResult br, Model model) {
 		if (br.hasErrors()) {
-			Iterable<Person> all = service.selectAndGroupById();
-			model.addAttribute(OBJ_PERSONS, all);
-			model.addAttribute(OBJ_NEW_PERSON, new Person());
-			return VIEW_SHOW_ALL;
+			model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
+			model.addAttribute(CV.OBJ_NEW_PERSON, new Person());
+			return CV.VIEW_SHOW_ALL;
 		}
 		service.updatePerson(p);
 
-		return BasicController.MAPPING_REDIRECT_WEB + BasicController.MAPPING_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
 	}
 
-	@PostMapping(MAPPING_DELETE_PERSON)
-	public String deletePerson(@RequestParam("id_delete") Integer id) {
-		System.out.println(id);
+	@PostMapping(CV.MAPPING_DELETE_PERSON)
+	public String deletePerson(@RequestParam(CV.PARAM_ID_DELETE) Integer id) {
 		service.deletePersonById(id);
-
-		return BasicController.MAPPING_REDIRECT_WEB + BasicController.MAPPING_ALL_PERSONS;
+		return CV.MAPPING_REDIRECT_WEB + CV.MAPPING_ALL_PERSONS;
 	}
 
-	@GetMapping(MAPPING_HELLO)
+	@GetMapping(CV.MAPPING_HELLO)
 	public String hello() {
-		return VIEW_HELLO;
+		return CV.VIEW_HELLO;
 	}
-	
 }
 
 

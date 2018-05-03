@@ -31,6 +31,7 @@ public class Person {
 	public Person() {
 		
 	}
+	
 	@Size(min = 2)
 	@Column(name = "Name")
 	private String name = "";
@@ -97,7 +98,6 @@ public class Person {
 	}
 
 	public String getLogin() {
-		// System.out.println("getter log " + login);
 		return login;
 	}
 
@@ -106,8 +106,6 @@ public class Person {
 	}
 
 	public String getPassword() {
-		// System.out.println("getter pass " + password);
-
 		return password;
 	}
 

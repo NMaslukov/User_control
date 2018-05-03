@@ -15,25 +15,22 @@ public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 
 	/*
 	 * Finds and returns token from cookies.
-	 * Returns null if token is absent.
-	 * If null was returned, filter will be sent redirect to login page.
+	 * Returns null if token isn't present.
+	 * If null was returned, filter will send the redirect to login page.
 	 */
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-		String token = findTokenInCookie(request.getCookies());
-		
-		return token;
+		return findTokenInCookies(request.getCookies());
 	}
 	
-	public String findTokenInCookie(Cookie[] cookies) {
-		String token = null;
+	public String findTokenInCookies(Cookie[] cookies) {
 
 		if(cookies != null)
 			 for (Cookie cookie : cookies) {
-				  if(cookie.getName().equals(TokenService.TOKEN_NAME))
-				  token = cookie.getValue();
+				   if(cookie.getName().equals(TokenService.TOKEN_NAME))
+				   return cookie.getValue();
 			}
 	
-		return token;
+		return null;
 	}
 
 }

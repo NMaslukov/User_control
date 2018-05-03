@@ -12,8 +12,9 @@ import com.example.demo.entity.Person;
 import com.example.demo.services.JpaService;
 
 @org.springframework.web.bind.annotation.RestController
-@RequestMapping("/rest")
+@RequestMapping(CV.REST)
 public class RestController {
+	
 	@Autowired
 	private JpaService service;
 
@@ -22,13 +23,10 @@ public class RestController {
 		return service.getById(id);
 	}
 
-
-
 	@PutMapping("/save")
 	public Person save(@RequestBody Person p) {
 		return service.save(p);
 	}
-
 
 	@DeleteMapping("/deletePersonById/{id}")
 	public Integer deletePersonById(@PathVariable Integer id) {
@@ -65,10 +63,4 @@ public class RestController {
 		return service.getById(id).getAge();
 	}
 
-
-
-	public Object increment(String anyString) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

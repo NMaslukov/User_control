@@ -16,9 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.example.demo.controllers.BasicController;
+import com.example.demo.controllers.CV;
 
 public class RoleFilter extends GenericFilterBean {
 	public static final Logger logger = LoggerFactory.getLogger(RoleFilter.class);
@@ -31,7 +33,7 @@ public class RoleFilter extends GenericFilterBean {
 		this.access = access;
 	}
 	
-	private final String REDIRECT_URL =  BasicController.MAPPING_LOGIN + BasicController.PARAM_NOT_RESPECTED;
+	private final String REDIRECT_URL =  CV.MAPPING_LOGIN + CV.PARAM_NOT_RESPECTED;
 
 	
 	@Override
@@ -42,29 +44,47 @@ public class RoleFilter extends GenericFilterBean {
 		String key = normalizeUrl(request.getRequestURI());
 		String[] ROLES = access.get(key);
 		
-		if(ROLES != null && response.getStatus() != MyTokenFilter.RESPONSE_CODE) {
-				for (String ROLE : ROLES) {
-					if(!(authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).
-						collect(Collectors.toList()).contains(ROLE))) {
-						response.sendRedirect(REDIRECT_URL + RedirectFilter.TARGET_URL_PARAM + 
-						request.getRequestURL());
-						logger.debug("No admin authority. Send redirect to " + REDIRECT_URL);
-				}
-			}
-		}
+		if(ROLES != null && response.getStatus() != MyTokenFilter.RESPONSE_CODE)
+				sendRedirectIfNotAllowed(authentication, ROLES);
 		
 		chain.doFilter(request, response);
 	}
 
 
+	private void sendRedirectIfNotAllowed(Authentication authentication, String[] ROLES) throws IOException {
+		for (String ROLE : ROLES) 
+			if(!hasRole(authentication, ROLE))
+				sendRedirect();
+				
+	}
+
+
+	private void sendRedirect() throws IOException {
+		getResponse().sendRedirect(REDIRECT_URL + RedirectFilter.TARGET_URL_PARAM + getRequest().getRequestURL());
+		logger.debug("No admin authority. Send redirect to " + REDIRECT_URL);
+	}
+
+
+	private HttpServletRequest getRequest() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+	}
 	
-	
-	
+	private HttpServletResponse getResponse() {
+		return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+	}
+
+	private boolean hasRole(Authentication authentication, String ROLE) {
+		return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).
+			collect(Collectors.toList())
+		   .contains(ROLE);
+	}
+
+
     private String normalizeUrl(String key) {
 		int last = key.length() - 1;
-		if(String.valueOf(key.charAt(last)).equals("/")) {
+		if(String.valueOf(key.charAt(last)).equals("/")) //delete double "/"
 			key = key.substring(0, last);
-		}
+
 		return key;
 	}
 

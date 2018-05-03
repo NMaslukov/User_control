@@ -14,12 +14,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * Class for creating and decoding a token.
  */
 public class TokenService {
-	public static final String TOKEN_NAME = "X-AUTH-TOKEN";
-	public static final String SECRET_KEY = "secret_key";
-	public static final String ID = "id";
-	public static final Integer EXPIRATION_TIME = 1000000;
+	public static final String  TOKEN_NAME = "X-AUTH-TOKEN";
+	public static final String  SECRET_KEY = "secret_key";
+	public static final String  ID = "id";
+	public static final Integer EXPIRATION_TIME = 10000000;
 	
-public static String createJWT(Integer integer, long ttlMillis) {
+public static String createJWT(Integer userId, long expirationTime) {
 		
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
  
@@ -30,11 +30,11 @@ public static String createJWT(Integer integer, long ttlMillis) {
 
 
     JwtBuilder builder = Jwts.builder()
-                                .claim(ID, integer)
+                                .claim(ID, userId)
                                 .signWith(signatureAlgorithm, signingKey);
  
-    if (ttlMillis >= 0) {
-    long expMillis = nowMillis + ttlMillis;
+    if (expirationTime >= 0) {
+    long expMillis = nowMillis + expirationTime;
         Date exp = new Date(expMillis);
         builder.setExpiration(exp);
     }
@@ -42,7 +42,7 @@ public static String createJWT(Integer integer, long ttlMillis) {
      	return builder.compact();
 }
 
-public static Integer parseJWT(String jwt) {
+public static Integer getUserIdFromToken(String jwt) {
 
     Claims claims = Jwts.parser()         
        .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))

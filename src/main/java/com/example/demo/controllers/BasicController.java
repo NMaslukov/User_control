@@ -20,27 +20,6 @@ import com.example.demo.services.JpaService;
 
 @Controller
 public class BasicController {
-	public static final String REDIRECT_TO_HELLO = "redirect:/web/hello";
-	public static final String WEB = "/web";
-	public static final String MAPPING_LOGIN = "/login";
-	public static final String MAPPING_LOGOUT = "/logout";
-	
-	public static final String ATR_EROR = "error";
-	public static final String ATR_NOT_AUTHORITY = "no_authority";
-	public static final String ATR_NOT_AUTHORIZE = "not_authorized";
-	
-	
-	public static final String MAPPING_ALL_PERSONS = "/allPersons";
-	public static final String MAPPING_REDIRECT_WEB = "redirect:/web";
-	public static final String MAPPING_REDIRECT = "redirect:";
-
-	public static final String PARAM_ERROR = "?error";
-	public static final String PARAM_NOT_RESPECTED = "?no_authority";
-	public static final String PARAM_NOT_AUTHORIZED = "?not_authorized";
-	public static final String PARAM_PASSWORD = "password";
-	public static final String PARAM_USERNAME = "username";
-	
-	public static final String VIEW_LOGIN = "login";
 
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
 
@@ -53,54 +32,62 @@ public class BasicController {
 		return "readme";
 	}
 	
-	@GetMapping(MAPPING_LOGIN)
+	@GetMapping(CV.MAPPING_LOGIN)
 	public String LoginPage(
-			@RequestParam(value = ATR_EROR, required = false) String error,
-			@RequestParam(value = ATR_NOT_AUTHORITY, required = false) String no_authority,
-			@RequestParam(value = ATR_NOT_AUTHORIZE, required = false) String not_authorized,
+			@RequestParam(value = CV.PARAM_EROR, required = false) String error,
+			@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
+			@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
+			//url before redirect to the login page
 			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url,
 			Model model) {
 		
-		//fix "/" problem
-		if(target_url != null && target_url.length() != 0 && String.valueOf(target_url.charAt(target_url.length() - 1)).equals("/") )
-		target_url = target_url.substring(0, target_url.length()-1);
+		target_url = normalizeURL(target_url);
 		
-		model.addAttribute(ATR_EROR, error);
-		model.addAttribute(ATR_NOT_AUTHORITY, no_authority);
-		model.addAttribute(ATR_NOT_AUTHORIZE, not_authorized);
+		model.addAttribute(CV.PARAM_EROR, error);
+		model.addAttribute(CV.PARAM_NOT_AUTHORITY, no_authority);
+		model.addAttribute(CV.PARAM_NOT_AUTHORIZE, not_authorized);
 		model.addAttribute(RedirectFilter.TARGET_URL, target_url);
 		
-		return VIEW_LOGIN;//test
+		return CV.VIEW_LOGIN;
+	}
+	
+	//fix "/" problem
+	private String normalizeURL(String target_url) {
+		if(target_url != null && target_url.length() != 0 && String.valueOf(target_url.charAt(target_url.length() - 1)).equals("/") )
+		target_url = target_url.substring(0, target_url.length()-1);
+		return target_url;
 	}
 
-	@PostMapping(MAPPING_LOGIN)
-	public String PostLoginPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(PARAM_PASSWORD) String password,
-			@RequestParam(PARAM_USERNAME) String login,
+	@PostMapping(CV.MAPPING_LOGIN)
+	public String PostLoginPage(
+			HttpServletResponse response,
+			@RequestParam(CV.PARAM_PASSWORD) String password,
+			@RequestParam(CV.PARAM_USERNAME) String login,
 			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url) {
 		
-		if(verify_log_pass(response, password, login)) {
+		if(isLogPassValid(response, password, login)) {
 			
 				if(target_url.length() != 0 && target_url != null)
-				return BasicController.MAPPING_REDIRECT + target_url;
+				return CV.MAPPING_REDIRECT + target_url;
 			
-			return MAPPING_REDIRECT + "/";
+			return CV.MAPPING_REDIRECT + "/";
 		}
 		
-		return MAPPING_REDIRECT +  MAPPING_LOGIN + PARAM_ERROR + RedirectFilter.TARGET_URL_PARAM +target_url;
+		return CV.MAPPING_REDIRECT +  CV.MAPPING_LOGIN + CV.PARAM_ERROR + RedirectFilter.TARGET_URL_PARAM +target_url;
 	}
 	
 	
-	@GetMapping(MAPPING_LOGOUT)
+	@GetMapping(CV.MAPPING_LOGOUT)
 	public String logout(HttpServletRequest request,HttpServletResponse response) {
 		
 		Cookie cookie = new Cookie(TokenService.TOKEN_NAME, "");
-        cookie.setMaxAge(0);
+        cookie.setMaxAge(0); 
         cookie.setPath(request.getContextPath() + "/");
         response.addCookie(cookie);
-		return MAPPING_REDIRECT + MAPPING_LOGIN;
+		return CV.MAPPING_REDIRECT + CV.MAPPING_LOGIN;
 	}
 	
-	public boolean verify_log_pass(HttpServletResponse response, String password, String login) {
+	public boolean isLogPassValid(HttpServletResponse response, String password, String login) {
 		Person person = service.getPersonByLogin(login);
 		try {
 			if(person != null && password.equals(person.getPassword())){

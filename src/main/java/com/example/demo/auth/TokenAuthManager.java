@@ -7,9 +7,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.dao.DaoAccesRepo;
+import com.example.demo.entity.Person;
 import com.example.demo.userConfig.MyUserDetails;
 /*
- * public Authentication authenticate gets an Authentication  object that actually represents token.
+ * public method authenticate() gets an Authentication  object that actually represents token.
  * This method extract token value, create and returns fully populated  Authentication object.
  */
 @Component
@@ -20,9 +21,12 @@ public class TokenAuthManager implements AuthenticationManager{
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		Integer extracted_id = TokenService.parseJWT(authentication.getName());
-		MyUserDetails details = new MyUserDetails(dao.findById(extracted_id).get());
-		CostumAuth auth = new CostumAuth(details );
+		//authentication.getName() returns token value
+		Integer extracted_id = TokenService.getUserIdFromToken(authentication.getName());
+		Person person = dao.findById(extracted_id).get();
+		MyUserDetails details = new MyUserDetails(person);
+		
+		MyAuthentication auth = new MyAuthentication(details);
 		
 		return auth;
 	}

@@ -1,11 +1,9 @@
 package com.example.demo.services;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import com.example.demo.entity.Person;
 
 /*
  * All methods returns null if Person does not exist. 
+ *
  */
 
 @Service
@@ -31,22 +30,18 @@ public class JpaService {
 	@Autowired
 	EntityManager entityManager;
 
-	// Update Person if already exist
-	
 	public Person save(Person p) {
-		try {
-			Person person = accesRepo.save(p);
-			if (person != null) {
-				return person;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			rollback_sequence(); 
-		}
-		return null;
-
+	if(isLoginUnique(p)) {
+		accesRepo.save(p);
+		return p;
 	}
 	
+		return null;
+	}
+
+	private boolean isLoginUnique(Person p) {
+		return accesRepo.getPersonByLogin(p.getLogin()) == null;
+	}
 	
 	@Cacheable(value = CacheProvider.VAL_PERSON, key = CacheProvider.KEY_ID)
 	public Person getById(Integer id) {
@@ -82,14 +77,4 @@ public class JpaService {
 		return accesRepo.getPersonByLogin(login);
 	}
 	
-	private void rollback_sequence() {
-		Session session = entityManager.unwrap(Session.class);
-		session.beginTransaction();
-		BigInteger val = (BigInteger) session.createNativeQuery("select next_val from hibernate_sequence").getSingleResult();
-
-		int decrement = val.intValue();
-		session.createNativeQuery("update hibernate_sequence set next_val = ?1").setParameter(1, --decrement).executeUpdate();
-		session.getTransaction().commit();
-		session.close();
-	}
 }
