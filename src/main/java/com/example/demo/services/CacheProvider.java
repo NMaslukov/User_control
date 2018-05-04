@@ -13,6 +13,7 @@ public class CacheProvider {
 	public static final String VAL_PERSON = "person";
 	public static final String KEY_ID = "#id";
 	public static final String KEY_P_ID = "#p.id";
+	
 	@Bean
 	public CacheManager cacheManager() {
 		ConcurrentMapCacheManager concurrentMapCacheManager = new ConcurrentMapCacheManager(VAL_PERSON);

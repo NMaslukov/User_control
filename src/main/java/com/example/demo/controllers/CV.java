@@ -35,7 +35,8 @@ public interface CV {
 	public static final String VIEW_LOGIN    = "login";
 	public static final String VIEW_SHOW_ALL = "show_all";
 	public static final String VIEW_HELLO 	 = "Hello";
-	
+	public static final String VIEW_README 	 = "readme";
+
 	public static final String OBJ_PERSONS 		 = "persons";
 	public static final String OBJ_NEW_PERSON	 = "new_person";
 	public static final String OBJ_UPDATE_PERSON = "update_person";

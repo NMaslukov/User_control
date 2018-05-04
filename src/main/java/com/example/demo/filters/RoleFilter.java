@@ -24,24 +24,19 @@ import com.example.demo.controllers.CV;
 
 public class RoleFilter extends GenericFilterBean {
 	public static final Logger logger = LoggerFactory.getLogger(RoleFilter.class);
-
 	private final Map<String,String[]> UrlRoleMap;
-	
 	private String[] ROLES;
 	
 	public RoleFilter(Map<String,String[]> access){
-	
 		this.UrlRoleMap = access;
 	}
 	
 	private final String REDIRECT_URL =  CV.MAPPING_LOGIN + CV.PARAM_NOT_RESPECTED;
-
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {		
 		if(isNeedCheck())
 		sendRedirectIfNotAllowed(SecurityContextHolder.getContext().getAuthentication(), ROLES);
-		
 		chain.doFilter(request, response);
 	}
 
@@ -49,7 +44,7 @@ public class RoleFilter extends GenericFilterBean {
 	private boolean isNeedCheck() {
 		 String key = normalizeUrl(getRequest().getRequestURI());
 	     ROLES = UrlRoleMap.get(key);
-		 return ROLES != null && getResponse().getStatus() != MyTokenFilter.RESPONSE_CODE;
+		 return ROLES != null && getResponse().getStatus() != MyTokenFilter.REDIRECT_CODE;
 	} 
 
 

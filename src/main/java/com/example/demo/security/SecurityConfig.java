@@ -40,11 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.csrf().disable().sessionManagement() 
-	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		 
-		 http.requestMatchers().
-		 antMatchers(WEB,REST).and().addFilter(requestHeaderAuthenticationFilter()).addFilterAfter(new RedirectFilter(), MyTokenFilter.class)
-		 .addFilterAfter(new RoleFilter(access), RedirectFilter.class);
+		http.requestMatchers().
+		antMatchers(WEB,REST).and().addFilter(requestHeaderAuthenticationFilter()).addFilterAfter(new RedirectFilter(), MyTokenFilter.class)
+		.addFilterAfter(new RoleFilter(access), RedirectFilter.class);
 			
 
 		

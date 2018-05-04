@@ -26,16 +26,20 @@ public class RedirectFilter extends GenericFilterBean {
 	@Override
 	public void doFilter(ServletRequest servlet_request, ServletResponse servlet_response, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse response = (HttpServletResponse) servlet_response;
-		HttpServletRequest request = (HttpServletRequest) servlet_request;
+		HttpServletRequest  request  = (HttpServletRequest)  servlet_request;
 
 		if(SecurityContextHolder.getContext().getAuthentication() == null) {
-			response.sendRedirect(CV.MAPPING_LOGIN_NOT_AUTHORIZED_TARGET_URL + request.getRequestURI());
-			response.setStatus(MyTokenFilter.RESPONSE_CODE);
+			sendRedirect(response, request);
 			logger.debug("Not authenticated. Sent redirect to login page");
 			return;
 		}
 		
 		chain.doFilter(request, response);
+	}
+
+	private void sendRedirect(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		response.sendRedirect(CV.MAPPING_LOGIN_NOT_AUTHORIZED_TARGET_URL + request.getRequestURI());
+		response.setStatus(MyTokenFilter.REDIRECT_CODE);
 	}
 		
 }

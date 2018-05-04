@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.preauth.RequestHeaderAuth
 import com.example.demo.auth.TokenService;
 
 public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
-	public static int RESPONSE_CODE = 302;
+	public static int REDIRECT_CODE = 302;
 	public static final Logger logger = LoggerFactory.getLogger(MyTokenFilter.class);
 
 	/*
@@ -24,7 +24,7 @@ public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 	
 	public String findTokenInCookies(Cookie[] cookies) {
 
-		if(cookies != null)
+			 if(cookies != null)
 			 for (Cookie cookie : cookies) {
 				   if(cookie.getName().equals(TokenService.TOKEN_NAME))
 				   return cookie.getValue();

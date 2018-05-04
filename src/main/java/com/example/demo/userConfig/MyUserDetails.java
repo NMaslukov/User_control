@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +14,7 @@ import com.example.demo.entity.Person;
 @Component
 
 public class MyUserDetails implements UserDetails {
-	private static final Logger logger = LoggerFactory.getLogger(MyUserDetails.class);
 	private static final long serialVersionUID = 2549547690657111195L;
-
 	private Person person;
 
 	public MyUserDetails() {

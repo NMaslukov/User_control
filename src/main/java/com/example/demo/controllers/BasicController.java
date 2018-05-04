@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.auth.TokenService;
 import com.example.demo.entity.Person;
 import com.example.demo.filters.RedirectFilter;
-import com.example.demo.services.JpaService;
+import com.example.demo.services.JpaServiceImpl;
 
 @Controller
 public class BasicController {
@@ -24,12 +24,12 @@ public class BasicController {
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
 
 	@Autowired
-	private JpaService service;
+	private JpaServiceImpl service;
 	
 	@GetMapping("/")
 	public String hello() {
 		logger.info("MAPPINT README");
-		return "readme";
+		return CV.VIEW_README;
 	}
 	
 	@GetMapping(CV.MAPPING_LOGIN)
@@ -42,13 +42,16 @@ public class BasicController {
 			Model model) {
 		
 		target_url = normalizeURL(target_url);
+		login_setAttributes(error, no_authority, not_authorized, target_url, model);
 		
+		return CV.VIEW_LOGIN;
+	}
+
+	private void login_setAttributes(String error, String no_authority, String not_authorized, String target_url, Model model) {
 		model.addAttribute(CV.PARAM_EROR, error);
 		model.addAttribute(CV.PARAM_NOT_AUTHORITY, no_authority);
 		model.addAttribute(CV.PARAM_NOT_AUTHORIZE, not_authorized);
 		model.addAttribute(RedirectFilter.TARGET_URL, target_url);
-		
-		return CV.VIEW_LOGIN;
 	}
 	
 	//fix "/" problem
@@ -59,18 +62,18 @@ public class BasicController {
 	}
 
 	@PostMapping(CV.MAPPING_LOGIN)
-	public String PostLoginPage(
+	public String ProcessLoginData(
 			HttpServletResponse response,
 			@RequestParam(CV.PARAM_PASSWORD) String password,
 			@RequestParam(CV.PARAM_USERNAME) String login,
 			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url) {
 		
-		if(isLogPassValid(password, login)) {
+		if(isLogPassValid(login, password)) {
 			setToken(response, service.getPersonByLogin(login));
 				if(isTargetUrlPresent(target_url))
 				return CV.MAPPING_REDIRECT + target_url;
 				else
-			return CV.MAPPING_REDIRECT + "/";
+			    return CV.MAPPING_REDIRECT + "/";
 		}
 		
 		return CV.MAPPING_REDIRECT_LOGIN_ERROR_URL + target_url;
@@ -93,7 +96,7 @@ public class BasicController {
         response.addCookie(cookie);
 	}
 	
-	public boolean isLogPassValid(String password, String login) {
+	public boolean isLogPassValid(String login, String password) {
 		Person person = service.getPersonByLogin(login);
 		return (person != null && password.equals(person.getPassword()));
 

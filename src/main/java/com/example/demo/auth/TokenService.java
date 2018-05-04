@@ -19,7 +19,7 @@ public class TokenService {
 	public static final String  ID = "id";
 	public static final Integer EXPIRATION_TIME = 10000000;
 	
-public static String createJWT(Integer userId, long expirationTime) {
+	public static String createJWT(Integer userId, long expirationTime) {
 		
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
  
@@ -42,11 +42,11 @@ public static String createJWT(Integer userId, long expirationTime) {
      	return builder.compact();
 }
 
-public static Integer getUserIdFromToken(String jwt) {
+public static Integer getUserIdFromToken(String token) {
 
     Claims claims = Jwts.parser()         
        .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-       .parseClaimsJws(jwt).getBody();
+       .parseClaimsJws(token).getBody();
   
      return (Integer) claims.get(ID);
 }

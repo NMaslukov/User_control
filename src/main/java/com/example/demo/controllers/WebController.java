@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.Person;
-import com.example.demo.services.JpaService;
+import com.example.demo.services.JpaServiceImpl;
 
 @Controller
 @RequestMapping(CV.WEB)
@@ -24,43 +24,55 @@ public class WebController {
 	public static final Logger logger = LoggerFactory.getLogger(WebController.class);
 
 	@Autowired
-	private JpaService service;
+	private JpaServiceImpl service;
 
 	@GetMapping(CV.MAPPING_ALL_PERSONS)
 	public ModelAndView allPersons() {
-		
 		ModelAndView m = new ModelAndView(CV.VIEW_SHOW_ALL);
+		allPersons_setAttrib(m);
+		return m;
+	}
+
+
+	private void allPersons_setAttrib(ModelAndView m) {
 		m.addObject(CV.OBJ_PERSONS, service.selectAndGroupById());
 		m.addObject(CV.OBJ_NEW_PERSON, new Person());
 		m.addObject(CV.OBJ_UPDATE_PERSON, new Person());
-
-		return m;
 	}
 
 
 	@PostMapping(CV.MAPPING_ADD_PERSON)
 	public String addNewPerson(@Valid @ModelAttribute(CV.OBJ_NEW_PERSON) Person p, BindingResult br, Model model) {
+		logger.info("try to add Person:   " + p);
 		if (br.hasErrors()) {
-			model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
-			model.addAttribute(CV.OBJ_UPDATE_PERSON, new Person());
+			addNewPerson_setAttrib(model);
 			return CV.VIEW_SHOW_ALL;
 		}
 		service.save(p);
-		
 		return CV.MAPPING_REDIRECT_WEB_ALL_PERSONS;
+	}
+
+
+	private void addNewPerson_setAttrib(Model model) {
+		model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
+		model.addAttribute(CV.OBJ_UPDATE_PERSON, new Person());
 	}
 
 
 	@PostMapping(CV.MAPPING_UPDATE_EXISTING_PERSON)
 	public String updateExistingPerson(@Valid @ModelAttribute(CV.OBJ_UPDATE_PERSON) Person p, BindingResult br, Model model) {
 		if (br.hasErrors()) {
-			model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
-			model.addAttribute(CV.OBJ_NEW_PERSON, new Person());
+			updateExistPers_setAtrib(model);
 			return CV.VIEW_SHOW_ALL;
 		}
 		service.updatePerson(p);
-
 		return CV.MAPPING_REDIRECT_WEB_ALL_PERSONS;
+	}
+
+
+	private void updateExistPers_setAtrib(Model model) {
+		model.addAttribute(CV.OBJ_PERSONS, service.selectAndGroupById());
+		model.addAttribute(CV.OBJ_NEW_PERSON, new Person());
 	}
 
 	@PostMapping(CV.MAPPING_DELETE_PERSON)

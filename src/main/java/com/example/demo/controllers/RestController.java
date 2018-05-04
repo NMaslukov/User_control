@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.entity.Person;
-import com.example.demo.services.JpaService;
+import com.example.demo.services.JpaServiceImpl;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping(CV.REST)
 public class RestController {
 	
 	@Autowired
-	private JpaService service;
+	private JpaServiceImpl service;
 
 	@GetMapping("/getById/{id}")
 	public Person getById(@PathVariable("id") Integer id) {

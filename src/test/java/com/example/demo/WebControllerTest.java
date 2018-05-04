@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.controllers.RestController;
 import com.example.demo.dao.DaoAccesRepo;
-import com.example.demo.services.JpaService;
+import com.example.demo.services.JpaServiceImpl;
 @RunWith(SpringRunner.class)
 @WebMvcTest(RestController.class)
 public class WebControllerTest {
@@ -17,7 +17,7 @@ public class WebControllerTest {
 	private RestController rest;
 	
 	@MockBean
-	private JpaService service;
+	private JpaServiceImpl service;
 	
 	@MockBean
 	private DaoAccesRepo dao;
