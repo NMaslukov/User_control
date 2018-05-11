@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.example.demo.auth.TokenService;
@@ -124,5 +127,31 @@ public class BasicController {
 			e.printStackTrace();
 		}
 		return "sites";
+	}
+	
+	@GetMapping("/test")
+	public String test(Model model) {
+		rest.testListPerson();
+		return CV.VIEW_README;
+	}
+	@GetMapping(value = "/testList")
+	@ResponseBody
+	public List<Person> test(HttpServletResponse response){
+		List<Person> list = new ArrayList<>();
+		for(int i = 0;i<100;i++) {
+			list.add(new Person(i,"name"+i,"surname"+1,i,"some_role","login","password"));
+		}
+		return list;
+	}
+	
+	@GetMapping("/sites_angular_service")
+	public String sites_angular_service() {
+		
+		return "sites_angularImpl";
+	}
+	@GetMapping("sites_ajaxImpl")
+	public String sites_ajaxImpl_service() {
+		
+		return "sites_ajaxImpl";
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.entity.Person;
 import com.example.demo.entity.Site;
 import com.example.demo.entity.SitesList;
 
@@ -30,6 +31,23 @@ public class StackOverflowService {
 	public List<Site> getListOfSites() throws RestClientException, URISyntaxException{
 		 ResponseEntity<SitesList> response = restTemplate.getForEntity(new URI(url), SitesList.class);
   		 return response.getBody().getItems();
+	}
+	
+	public void testListPerson() {
+		RestTemplate test_template = new RestTemplate();
+		String test_url = "http://localhost:8080/testList";
+		try {
+			ResponseEntity<Person[]> response = test_template.getForEntity(new URI(test_url), Person[].class);
+
+			Person[] array = response.getBody();
+			for (Person person : array)
+				System.out.println(person);
+		
+		} catch (RestClientException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 }

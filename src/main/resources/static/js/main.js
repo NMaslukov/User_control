@@ -1,9 +1,12 @@
 var app = angular.module("springDemo", []);
 
-app.controller("AppCtrl", function($scope, $http) {
-    $scope.websites = [];
+app.controller("AppCtrl", function($scope, $http, $window) {
+ 
 
-    $http.get('http://localhost:8099/api/stackoverflow').success(function(data) {
-        $scope.websites = data;
+
+    $http.get('http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq').success(function(response) {
+        $scope.sites = response.items;
+		
     });
+	
 });

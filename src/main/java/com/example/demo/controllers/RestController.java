@@ -1,8 +1,5 @@
 package com.example.demo.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,14 +62,6 @@ public class RestController {
 	public Integer getAgeById(@PathVariable("id") Integer id) {
 		return service.getById(id).getAge();
 	}
-	@GetMapping("/testList")
-	public List<Person> test(){
-		
-		List<Person> list = new ArrayList<>();
-		for(int i = 0;i<100;i++) {
-			list.add(new Person(i,"name"+i,"surname"+1,i,"some_role","login","password"));
-		}
-		return list;
-	}
+
 
 }
