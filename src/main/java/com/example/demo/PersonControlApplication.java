@@ -12,8 +12,8 @@ import com.example.demo.entity.Person;
 @SpringBootApplication
 @EnableCaching
 public class PersonControlApplication implements CommandLineRunner {
-
-	@Autowired
+	
+	@Autowired //
 	DaoAccesRepo accesRepo;
 	
 	public static void main(String[] args) throws InterruptedException {
