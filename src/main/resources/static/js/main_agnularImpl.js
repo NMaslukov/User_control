@@ -1,5 +1,5 @@
 var app = angular.module("springDemo", []);
-
+var test;
 app.controller("AppCtrl", function($scope, $http, $window) {
  
 

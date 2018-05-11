@@ -1,6 +1,6 @@
  $(document).ready(function(){
 
-  $.getJSON( "http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq", function( data ) {
+  $.getJSON( "https://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq", function( data ) {
   
   $.each( data.items, function( key, val ) {
 	    $(".for_append").append("<tr>");
