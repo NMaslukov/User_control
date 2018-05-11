@@ -3,10 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>StackExchanger</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body ng-app="springDemo">
+This service uses API from api.stackexchange.com/docs/sites <br>
+Sends get request to http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq , processes the JSON-response<br>
+and load data into the table.<br>
+Server-side implementation <br>
 <div class="container" style="margin-top: 30px" ng-controller="AppCtrl">
     <div class="row">
         <div class="col-md-12">
@@ -35,7 +39,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="js/angular.min.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

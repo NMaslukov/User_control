@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.entity.Site;
-import com.example.demo.services.StackOverflowService;
+import com.example.demo.services.StackExchangerService;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
   webEnvironment = WebEnvironment.RANDOM_PORT,
@@ -22,7 +22,7 @@ import com.example.demo.services.StackOverflowService;
 public class StackOverflowIntegrationTest {
 
 	@Autowired
-	StackOverflowService rest;
+	StackExchangerService rest;
 	@Test
 	public void rest_test() {
 		//Mockito.when(rest.getListOfSites()).thenReturn(new List<Sites>())

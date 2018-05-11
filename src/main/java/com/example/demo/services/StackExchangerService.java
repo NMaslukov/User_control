@@ -21,7 +21,7 @@ import com.example.demo.entity.SitesList;
  * http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq
  */
 @Component
-public class StackOverflowService {
+public class StackExchangerService {
 	HttpClient httpClien = HttpClientBuilder.create().build();
 	ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClien);
 	private RestTemplate restTemplate = new RestTemplate(requestFactory);

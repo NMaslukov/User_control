@@ -23,7 +23,7 @@ import com.example.demo.auth.TokenService;
 import com.example.demo.entity.Person;
 import com.example.demo.filters.RedirectFilter;
 import com.example.demo.services.JpaServiceImpl;
-import com.example.demo.services.StackOverflowService;
+import com.example.demo.services.StackExchangerService;
 
 @Controller
 public class BasicController {
@@ -31,7 +31,7 @@ public class BasicController {
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
 	
 	@Autowired
-	StackOverflowService rest;
+	StackExchangerService rest;
 	
 	@Autowired
 	private JpaServiceImpl service;
@@ -144,14 +144,14 @@ public class BasicController {
 		return list;
 	}
 	
-	@GetMapping("/sites_angular_service")
+	@GetMapping("/sites_angularImpl_service")
 	public String sites_angular_service() {
 		
-		return "sites_angularImpl";
+		return "sites_angularImpl_service";
 	}
-	@GetMapping("sites_ajaxImpl")
+	@GetMapping("/sites_ajaxImpl_service")
 	public String sites_ajaxImpl_service() {
 		
-		return "sites_ajaxImpl";
+		return "sites_ajaxImpl_service";
 	}
 }
