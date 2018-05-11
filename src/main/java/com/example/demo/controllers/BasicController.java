@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import java.net.URISyntaxException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,17 +14,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestClientException;
 
 import com.example.demo.auth.TokenService;
 import com.example.demo.entity.Person;
 import com.example.demo.filters.RedirectFilter;
 import com.example.demo.services.JpaServiceImpl;
+import com.example.demo.services.StackOverflowService;
 
 @Controller
 public class BasicController {
 
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
-
+	
+	@Autowired
+	StackOverflowService rest;
+	
 	@Autowired
 	private JpaServiceImpl service;
 	
@@ -107,5 +114,15 @@ public class BasicController {
 		Cookie c = new Cookie(TokenService.TOKEN_NAME, token);
 		c.setPath("/"); 
 		response.addCookie(c);
+	}
+	
+	@GetMapping(CV.MAPPING_SITES_SERVICE)
+	public String getSites(Model model) {
+		try {
+			model.addAttribute(CV.ATTRIBUTE_LIST_SITES,rest.getListOfSites());
+		} catch (RestClientException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+		return "sites";
 	}
 }

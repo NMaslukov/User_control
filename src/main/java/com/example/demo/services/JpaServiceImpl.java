@@ -21,7 +21,7 @@ import com.example.demo.entity.Person;
 @Service
 public class JpaServiceImpl implements JpaService{
 	public static final Logger logger = LoggerFactory.getLogger(JpaServiceImpl.class);
-
+	public String test() { return "test";}
 	@Autowired
 	DaoAccesRepo accesRepo;
 

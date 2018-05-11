@@ -25,6 +25,7 @@ public interface CV {
 	public static final String MAPPING_REDIRECT_LOGIN = "redirect:/login";
 	public static final String MAPPING_REDIRECT_LOGIN_ERROR_URL = "redirect:/login?error&TARGET_URL=";
 	public static final String MAPPING_LOGIN_NOT_AUTHORIZED_TARGET_URL	= "/login?not_authorized&TARGET_URL=";
+	public static final String MAPPING_SITES_SERVICE = "/sites_service";
 	
 	public static final String PARAM_ERROR 			= "?error";
 	public static final String PARAM_NOT_RESPECTED  = "?no_authority";
@@ -45,6 +46,7 @@ public interface CV {
 	public static final String REDIRECT_LOGIN = "redirect:/login";
 	public static final String REDIRECT_LOGIN_ERROR_URL = "redirect:/login?error&TARGET_URL=";
 	public static final String LOGIN_NOT_AUTHORIZED_TARGET_URL	= "/login?not_authorized&TARGET_URL=";
+	public static final String ATTRIBUTE_LIST_SITES = "sites_list";
 	
 	
 }
