@@ -18,27 +18,27 @@ public class Site {
 	public Site() {}
 
 	public String getFavicon_url() {
-	return favicon_url;
+		return favicon_url;
 	}
 	
 	public void setFavicon_url(String favicon_url) {
-	this.favicon_url = favicon_url;
+		this.favicon_url = favicon_url;
 	}
 	
 	public String getSite_url() {
-	return site_url;
+		return site_url;
 	}
 	
 	public void setSite_url(String site_url) {
-	this.site_url = site_url;
+		this.site_url = site_url;
 	}
 	
 	public String getName() {
-	return name;
+		return name;
 	}
 	
 	public void setName(String name) {
-	this.name = name;
+		this.name = name;
 	}
 
 }

@@ -21,6 +21,7 @@ import com.example.demo.services.JpaServiceImpl;
 @Controller
 @RequestMapping(CV.WEB)
 public class WebController {
+	
 	public static final Logger logger = LoggerFactory.getLogger(WebController.class);
 
 	@Autowired
@@ -32,7 +33,6 @@ public class WebController {
 		allPersons_setAttrib(m);
 		return m;
 	}
-
 
 	private void allPersons_setAttrib(ModelAndView m) {
 		m.addObject(CV.OBJ_PERSONS, service.selectAndGroupById());

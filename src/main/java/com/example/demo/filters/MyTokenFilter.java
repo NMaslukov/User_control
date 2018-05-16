@@ -14,7 +14,8 @@ import com.example.demo.auth.TokenService;
  * Returns null if token isn't present.
  * If null was returned, filter will send the redirect to login page.
  */
-public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
+public class MyTokenFilter  extends RequestHeaderAuthenticationFilter {
+	
 	public static int REDIRECT_CODE = 302;
 	public static final Logger logger = LoggerFactory.getLogger(MyTokenFilter.class);
 
@@ -24,13 +25,20 @@ public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 	}
 	
 	public String findTokenInCookies(Cookie[] cookies) {
+		String token = null;
+		
+		if(cookies != null) token = getToken(cookies);
+			
+		return token;
+	}
 
-			 if(cookies != null)
-			 for (Cookie cookie : cookies) {
-				   if(cookie.getName().equals(TokenService.TOKEN_NAME))
-				   return cookie.getValue();
-			}
-		return null;
+	private String getToken(Cookie[] cookies) {
+		String token = null;
+		
+		for (Cookie cookie : cookies) {
+			 if(cookie.getName().equals(TokenService.TOKEN_NAME)) token = cookie.getValue();
+		}
+		return token;
 	}
 
 }

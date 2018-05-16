@@ -27,10 +27,10 @@ public class JpaServiceImpl implements JpaService{
 	DaoAccesRepo accesRepo;
 
 	public Person save(Person p) {
-	  if(isLoginUnique(p)) {
-		accesRepo.save(p);
-		return p;
-	  }
+		if(isLoginUnique(p)) {
+			accesRepo.save(p);
+			return p;
+	    }
 		return null;
 	}
 
@@ -42,10 +42,10 @@ public class JpaServiceImpl implements JpaService{
 	public Person getById(Integer id) {
 		Optional<Person> optional = accesRepo.findById(id);
 
-		if (optional.isPresent()) 
+		if (optional.isPresent()) {
 			return optional.get();
-		else
-			return null;
+		}
+		else return null;
 	}
 
 
@@ -62,7 +62,8 @@ public class JpaServiceImpl implements JpaService{
 
 	@CachePut(value = CacheProvider.VAL_PERSON,key=CacheProvider.KEY_P_ID)
 	public void updatePerson(Person p) {
-		accesRepo.updateById(p.getId(), p.getName(), p.getSurname(), p.getAge(), p.getRole(), p.getLogin(), p.getPassword());
+		accesRepo.updateById(p.getId(), p.getName(), p.getSurname(),
+				p.getAge(), p.getRole(), p.getLogin(), p.getPassword());
 
 	}
 

@@ -48,5 +48,4 @@ public interface CV {
 	public static final String LOGIN_NOT_AUTHORIZED_TARGET_URL	= "/login?not_authorized&TARGET_URL=";
 	public static final String ATTRIBUTE_LIST_SITES = "sites_list";
 	
-	
 }

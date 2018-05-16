@@ -49,9 +49,9 @@ public class RoleFilter extends GenericFilterBean {
 
 
 	private void sendRedirectIfNotAllowed(Authentication authentication, String[] ROLES) throws IOException {
-		for (String ROLE : ROLES) 
-			if(!hasRole(authentication, ROLE))
-				sendRedirect();
+		for (String ROLE : ROLES) {
+			if(!hasRole(authentication, ROLE)) sendRedirect();
+		}
 	}
 
 
@@ -71,17 +71,22 @@ public class RoleFilter extends GenericFilterBean {
 
 	private boolean hasRole(Authentication authentication, String ROLE) {
 		return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).
-			collect(Collectors.toList())
-		   .contains(ROLE);
+				collect(Collectors.toList())
+				.contains(ROLE);
 	}
 
 
     private String normalizeUrl(String key) {
 		int last = key.length() - 1;
-		if(String.valueOf(key.charAt(last)).equals("/")) //delete double "/"
-			key = key.substring(0, last);
-
+		
+		if(hasSlash(key, last)) key = key.substring(0, last);
+			
 		return key;
+	}
+
+
+	private boolean hasSlash(String key, int last) {
+		return String.valueOf(key.charAt(last)).equals("/");
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 
 @Table(name = "person")
 public class Person {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "ID")
@@ -28,6 +29,7 @@ public class Person {
 		this.login = login;
 		this.password = password;
 	}
+	
 	public Person() {
 		
 	}
@@ -40,7 +42,6 @@ public class Person {
 	@Column(name = "Surname")
 	private String surname = "";
 	
-
 	@Column(name = "Age")
 	private Integer age = 0;
 	
@@ -65,7 +66,6 @@ public class Person {
 	}
 
 	public String getName() {
-
 		return name;
 	}
 

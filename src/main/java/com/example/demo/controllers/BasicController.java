@@ -44,11 +44,11 @@ public class BasicController {
 	
 	@GetMapping(CV.MAPPING_LOGIN)
 	public String LoginPage(
-			@RequestParam(value = CV.PARAM_EROR, required = false) String error,
-			@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
-			@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
-			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url,
-			Model model) {
+		@RequestParam(value = CV.PARAM_EROR, required = false) String error,
+		@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
+		@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
+		@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url,
+		Model model) {
 		
 		login_setAttributes(error, no_authority, not_authorized, normalizeURL(target_url), model);
 		return CV.VIEW_LOGIN;
@@ -63,26 +63,34 @@ public class BasicController {
 	
 	//fix "/" problem
 	private String normalizeURL(String target_url) {
-		if(target_url != null && target_url.length() != 0 && String.valueOf(target_url.charAt(target_url.length() - 1)).equals("/") )
-		target_url = target_url.substring(0, target_url.length()-1);
+		if(notEmpty(target_url) && hasSlesh(target_url)) 
+				target_url = target_url.substring(0, target_url.length()-1);
+		
 		return target_url;
+	}
+
+	private boolean hasSlesh(String target_url) {
+		return String.valueOf(target_url.charAt(target_url.length() - 1)).equals("/");
+	}
+
+	private boolean notEmpty(String target_url) {
+		return target_url != null && target_url.length() != 0;
 	}
 
 	@PostMapping(CV.MAPPING_LOGIN)
 	public String ProcessLoginData(
-			HttpServletResponse response,
-			@RequestParam(CV.PARAM_PASSWORD) String password,
-			@RequestParam(CV.PARAM_USERNAME) String login,
-			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url) {
+		HttpServletResponse response,
+		@RequestParam(CV.PARAM_PASSWORD) String password,
+		@RequestParam(CV.PARAM_USERNAME) String login,
+		@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url) {
 		
 		if(isLogPassValid(login, password)) {
 			setToken(response, service.getPersonByLogin(login));
 				if(isTargetUrlPresent(target_url))
-				return CV.MAPPING_REDIRECT + target_url;
-				else
-			    return CV.MAPPING_REDIRECT + "/";
+					return CV.MAPPING_REDIRECT + target_url;
+					else
+					return CV.MAPPING_REDIRECT + "/";
 		}
-		
 		return CV.MAPPING_REDIRECT_LOGIN_ERROR_URL + target_url;
 	}
 
@@ -106,7 +114,6 @@ public class BasicController {
 	public boolean isLogPassValid(String login, String password) {
 		Person person = service.getPersonByLogin(login);
 		return (person != null && password.equals(person.getPassword()));
-
 	}
 
 	private void setToken(HttpServletResponse response, Person person) {
@@ -131,6 +138,7 @@ public class BasicController {
 		rest.testListPerson();
 		return CV.VIEW_README;
 	}
+	
 	/*
 	 * TODO test
 	 */
@@ -141,17 +149,18 @@ public class BasicController {
 		for(int i = 0;i<100;i++) {
 			list.add(new Person(i,"name"+i,"surname"+1,i,"some_role","login","password"));
 		}
+
 		return list;
 	}
 	
 	@GetMapping("/sites_angularImpl_service")
 	public String sites_angular_service() {
-		
 		return "sites_angularImpl_service";
 	}
+	
 	@GetMapping("/sites_ajaxImpl_service")
 	public String sites_ajaxImpl_service() {
-		
 		return "sites_ajaxImpl_service";
 	}
+	
 }

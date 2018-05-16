@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -22,17 +24,19 @@ import com.example.demo.entity.SitesList;
  */
 @Component
 public class StackExchangerService {
-	HttpClient httpClien = HttpClientBuilder.create().build();
-	ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClien);
-	
+	public static final Logger logger = LoggerFactory.getLogger(StackExchangerService.class);
+
+	private HttpClient httpClien = HttpClientBuilder.create().build();
+	private ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClien);
 	private RestTemplate restTemplate = new RestTemplate(requestFactory);
-	public final String url = "http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq";
 	
+	public final String url = "http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq";
 	
 	public List<Site> getListOfSites() throws RestClientException, URISyntaxException{
 		 ResponseEntity<SitesList> response = restTemplate.getForEntity(new URI(url), SitesList.class);
   		 return response.getBody().getItems();
 	}
+	
 	/*
 	 * TODO test
 	 */
@@ -43,13 +47,13 @@ public class StackExchangerService {
 			ResponseEntity<Person[]> response = test_template.getForEntity(new URI(test_url), Person[].class);
 
 			Person[] array = response.getBody();
-			for (Person person : array)
-				System.out.println(person);
+			for (Person person : array) {
+				logger.info(person.toString());
+			}
 		
 		} catch (RestClientException | URISyntaxException e) {
 			e.printStackTrace();
 		}
-		
 		
 	}
 	

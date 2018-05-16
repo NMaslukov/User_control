@@ -20,25 +20,22 @@ public class TokenService {
 	public static final String  ID = "id";
 	public static final Integer EXPIRATION_TIME = 10000000;
 	
+	
 	public static String createJWT(Integer userId, long expirationTime) {
-		
-    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
- 
-    long nowMillis = System.currentTimeMillis();
- 
-    byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
-    Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
+		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+		long nowMillis = System.currentTimeMillis();
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
-
-    JwtBuilder builder = Jwts.builder()
-                                .claim(ID, userId)
-                                .signWith(signatureAlgorithm, signingKey);
+		JwtBuilder builder = Jwts.builder()
+				.claim(ID, userId)
+				.signWith(signatureAlgorithm, signingKey);
  
-    if (expirationTime >= 0) {
-    	long expMillis = nowMillis + expirationTime;
-        Date exp = new Date(expMillis);
-        builder.setExpiration(exp);
-       }
+		if (expirationTime >= 0) {
+			long expMillis = nowMillis + expirationTime;
+			Date exp = new Date(expMillis);
+			builder.setExpiration(exp);
+		}
     
      	return builder.compact();
 	}
@@ -50,8 +47,8 @@ public class TokenService {
 
 	private static Claims getClaims(String token) {
 		return Jwts.parser()         
-		.setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-		.parseClaimsJws(token).getBody();
+				.setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+				.parseClaimsJws(token).getBody();
 	}
 
 }

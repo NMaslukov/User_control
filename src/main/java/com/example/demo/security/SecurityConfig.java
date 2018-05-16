@@ -30,36 +30,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public final String[] role_admin = {"ROLE_ADMIN"};
 	private final Map<String,String[]> access = new HashMap<>();
 	
-	public SecurityConfig() throws InterruptedException { // beta version, fix later
+	public SecurityConfig() throws InterruptedException { //TODO fix later
 		access.put("/web/allPersons", role_admin);
 	}
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.csrf().disable().sessionManagement() 
-	    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	    		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		 
-		http.requestMatchers().
-		antMatchers(WEB,REST).and().addFilter(requestHeaderAuthenticationFilter()).addFilterAfter(new RedirectFilter(), MyTokenFilter.class)
-		.addFilterAfter(new RoleFilter(access), RedirectFilter.class);
-			
-
+		http.requestMatchers()
+				.antMatchers(WEB,REST).and()
+				.addFilter(requestHeaderAuthenticationFilter()).addFilterAfter(new RedirectFilter(), MyTokenFilter.class)
+				.addFilterAfter(new RoleFilter(access), RedirectFilter.class);
 		
-	
 	}
 		
-	  public RequestHeaderAuthenticationFilter requestHeaderAuthenticationFilter() {  
+	public RequestHeaderAuthenticationFilter requestHeaderAuthenticationFilter() {  
 		  
-	   MyTokenFilter requestHeaderAuthenticationFilter = new MyTokenFilter();
+		MyTokenFilter requestHeaderAuthenticationFilter = new MyTokenFilter();
 	    requestHeaderAuthenticationFilter.setPrincipalRequestHeader(TokenService.TOKEN_NAME);
 	    requestHeaderAuthenticationFilter.setAuthenticationManager(authenticationManager);
 	    requestHeaderAuthenticationFilter.setExceptionIfHeaderMissing(true);
 	    
 	    return requestHeaderAuthenticationFilter;
 	  }
-	
 	
 }

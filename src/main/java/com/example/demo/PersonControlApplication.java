@@ -14,7 +14,7 @@ import com.example.demo.entity.Person;
 public class PersonControlApplication implements CommandLineRunner {
 	
 	@Autowired
-	DaoAccesRepo accesRepo;
+	private DaoAccesRepo accesRepo;
 	
 	public static void main(String[] args) throws InterruptedException {
 		SpringApplication.run(PersonControlApplication.class, args);
@@ -30,6 +30,5 @@ public class PersonControlApplication implements CommandLineRunner {
 		accesRepo.save(new Person(0, "user", "user", 2, "ROLE_USER", "user", "user"));
 		accesRepo.save(new Person(0, "test", "test", 22, "ROLE_USER", "test", "test"));
 	}
-
 
 }

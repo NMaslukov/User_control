@@ -19,14 +19,15 @@ public class TokenAuthManager implements AuthenticationManager {
 	@Autowired
 	DaoAccesRepo dao;
 	
+	/*
+	 * Authentication.getName() returns token value.
+	 */
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		//authentication.getName() returns token value
 		Integer extracted_id = TokenService.getUserIdFromToken(authentication.getName());
 		Person person = dao.findById(extracted_id).get();
 		MyUserDetails details = new MyUserDetails(person);
-		
 		MyAuthentication auth = new MyAuthentication(details);
 		
 		return auth;

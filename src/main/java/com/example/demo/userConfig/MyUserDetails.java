@@ -17,9 +17,7 @@ public class MyUserDetails implements UserDetails {
 	private static final long serialVersionUID = 2549547690657111195L;
 	private Person person;
 
-	public MyUserDetails() {
-
-	}
+	public MyUserDetails() {}
 
 	public MyUserDetails(Person p) {
 		this.person = p;
