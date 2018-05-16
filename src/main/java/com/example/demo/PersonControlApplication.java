@@ -13,7 +13,7 @@ import com.example.demo.entity.Person;
 @EnableCaching
 public class PersonControlApplication implements CommandLineRunner {
 	
-	@Autowired //
+	@Autowired
 	DaoAccesRepo accesRepo;
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -22,6 +22,10 @@ public class PersonControlApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		initUsers();
+	}
+
+	private void initUsers() {
 		accesRepo.save(new Person(0, "admin", "admin", 1, "ROLE_ADMIN", "admin", "admin"));
 		accesRepo.save(new Person(0, "user", "user", 2, "ROLE_USER", "user", "user"));
 		accesRepo.save(new Person(0, "test", "test", 22, "ROLE_USER", "test", "test"));

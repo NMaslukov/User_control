@@ -11,9 +11,10 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 /*
- * Class for creating and decoding a token.
+ * Creating and decoding a token.
  */
 public class TokenService {
+	
 	public static final String  TOKEN_NAME = "X-AUTH-TOKEN";
 	public static final String  SECRET_KEY = "secret_key";
 	public static final String  ID = "id";
@@ -34,22 +35,25 @@ public class TokenService {
                                 .signWith(signatureAlgorithm, signingKey);
  
     if (expirationTime >= 0) {
-    long expMillis = nowMillis + expirationTime;
+    	long expMillis = nowMillis + expirationTime;
         Date exp = new Date(expMillis);
         builder.setExpiration(exp);
-    }
+       }
     
      	return builder.compact();
-}
+	}
 
-public static Integer getUserIdFromToken(String token) {
+	public static Integer getUserIdFromToken(String token) {
+		
+		return (Integer) getClaims(token).get(ID);
+	}
 
-    Claims claims = Jwts.parser()         
-       .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-       .parseClaimsJws(token).getBody();
-  
-     return (Integer) claims.get(ID);
-}
+	private static Claims getClaims(String token) {
+		return Jwts.parser()         
+		.setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+		.parseClaimsJws(token).getBody();
+	}
+
 }
 
 

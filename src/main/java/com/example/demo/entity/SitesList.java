@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+
 @Component
 public class SitesList {
 	

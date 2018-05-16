@@ -61,7 +61,6 @@ public class MyUserDetails implements UserDetails {
 		l.add(new SimpleGrantedAuthority(person.getRole()));
 		return l;
 	}
-
 }
 
 

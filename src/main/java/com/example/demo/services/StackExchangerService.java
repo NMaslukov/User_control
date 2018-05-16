@@ -24,6 +24,7 @@ import com.example.demo.entity.SitesList;
 public class StackExchangerService {
 	HttpClient httpClien = HttpClientBuilder.create().build();
 	ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClien);
+	
 	private RestTemplate restTemplate = new RestTemplate(requestFactory);
 	public final String url = "http://api.stackexchange.com/2.2/sites?filter=!2--Yion.2OJSStcKSpFvq";
 	
@@ -32,7 +33,9 @@ public class StackExchangerService {
 		 ResponseEntity<SitesList> response = restTemplate.getForEntity(new URI(url), SitesList.class);
   		 return response.getBody().getItems();
 	}
-	
+	/*
+	 * TODO test
+	 */
 	public void testListPerson() {
 		RestTemplate test_template = new RestTemplate();
 		String test_url = "http://localhost:8080/testList";

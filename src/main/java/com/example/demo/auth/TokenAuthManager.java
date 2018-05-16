@@ -10,11 +10,12 @@ import com.example.demo.dao.DaoAccesRepo;
 import com.example.demo.entity.Person;
 import com.example.demo.userConfig.MyUserDetails;
 /*
- * public method authenticate() gets an Authentication object that actually represents token.
+ * authenticate() gets an Authentication object that actually represents a token.
  * This method extract token value, create and returns fully populated Authentication object.
  */
 @Component
-public class TokenAuthManager implements AuthenticationManager{
+public class TokenAuthManager implements AuthenticationManager {
+	
 	@Autowired
 	DaoAccesRepo dao;
 	

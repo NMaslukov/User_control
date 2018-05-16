@@ -9,17 +9,14 @@ public class Site {
 	private String site_url;
 	private String name;
 	
-	
 	public Site(String favicon_url, String site_url, String name) {
 		this.favicon_url = favicon_url;
 		this.site_url = site_url;
 		this.name = name;
 	}
 	
-	public Site() {
-	}
+	public Site() {}
 
-	//getters and setters
 	public String getFavicon_url() {
 	return favicon_url;
 	}

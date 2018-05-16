@@ -47,13 +47,10 @@ public class BasicController {
 			@RequestParam(value = CV.PARAM_EROR, required = false) String error,
 			@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
 			@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
-			//url before redirect to the login page
-			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url,
+			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url,
 			Model model) {
 		
-		target_url = normalizeURL(target_url);
-		login_setAttributes(error, no_authority, not_authorized, target_url, model);
-		
+		login_setAttributes(error, no_authority, not_authorized, normalizeURL(target_url), model);
 		return CV.VIEW_LOGIN;
 	}
 
@@ -61,7 +58,7 @@ public class BasicController {
 		model.addAttribute(CV.PARAM_EROR, error);
 		model.addAttribute(CV.PARAM_NOT_AUTHORITY, no_authority);
 		model.addAttribute(CV.PARAM_NOT_AUTHORIZE, not_authorized);
-		model.addAttribute(RedirectFilter.TARGET_URL, target_url);
+		model.addAttribute(RedirectFilter.URL_BEFORE_REDIRECT, target_url);
 	}
 	
 	//fix "/" problem
@@ -76,7 +73,7 @@ public class BasicController {
 			HttpServletResponse response,
 			@RequestParam(CV.PARAM_PASSWORD) String password,
 			@RequestParam(CV.PARAM_USERNAME) String login,
-			@RequestParam(value = RedirectFilter.TARGET_URL, required = false) String target_url) {
+			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url) {
 		
 		if(isLogPassValid(login, password)) {
 			setToken(response, service.getPersonByLogin(login));
@@ -134,6 +131,9 @@ public class BasicController {
 		rest.testListPerson();
 		return CV.VIEW_README;
 	}
+	/*
+	 * TODO test
+	 */
 	@GetMapping(value = "/testList")
 	@ResponseBody
 	public List<Person> test(HttpServletResponse response){

@@ -9,15 +9,16 @@ import org.springframework.security.web.authentication.preauth.RequestHeaderAuth
 
 import com.example.demo.auth.TokenService;
 
+/*
+ * Finds and returns token from cookies.
+ * Returns null if token isn't present.
+ * If null was returned, filter will send the redirect to login page.
+ */
 public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 	public static int REDIRECT_CODE = 302;
 	public static final Logger logger = LoggerFactory.getLogger(MyTokenFilter.class);
 
-	/*
-	 * Finds and returns token from cookies.
-	 * Returns null if token isn't present.
-	 * If null was returned, filter will send the redirect to login page.
-	 */
+	@Override
 	protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
 		return findTokenInCookies(request.getCookies());
 	}
@@ -29,7 +30,6 @@ public class MyTokenFilter  extends RequestHeaderAuthenticationFilter{
 				   if(cookie.getName().equals(TokenService.TOKEN_NAME))
 				   return cookie.getValue();
 			}
-	
 		return null;
 	}
 
