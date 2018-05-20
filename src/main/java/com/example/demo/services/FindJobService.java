@@ -47,11 +47,14 @@ public class FindJobService {
 	
 	
 	private void filter(List<Vacancy> vacancies, String post) {
+		if(post == null || post.length() < 1 ) return;
+		post = post.toLowerCase(); // compare with lowwer case
+		
 		String[] req_post = post.split("\\+");
 		
 		for (Iterator<Vacancy> vac_it = vacancies.iterator();vac_it.hasNext();) {
 			Vacancy vac = vac_it.next();
-			String vac_post = vac.getPost();
+			String vac_post = vac.getPost().toLowerCase();//set lowwer
 			
 			for (String string : req_post) {
 				if(!vac_post.contains(string)) {
@@ -233,6 +236,7 @@ public class FindJobService {
 
 
 	public void setCorresponding(String pref, List<Vacancy> vacancies) {
+		if(pref.length() < 1) return;
 		pref=pref.toLowerCase().replaceAll("  ", " ");//два пробела уберёт в один
 		
 		String[] prefs = pref.split(";");

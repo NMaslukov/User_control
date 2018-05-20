@@ -3,11 +3,11 @@ package com.example.demo.entity;
 public class Vacancy implements Comparable<Vacancy>{
 	private String  post;
 	private String  vacancy_url;
-	private Integer corresponding;
+	private int corresponding;
 	private String requirments;
 	
 	public Vacancy(){
-		
+		corresponding = 0;
 	}
 	public String getPost() {
 		return post;
@@ -21,10 +21,10 @@ public class Vacancy implements Comparable<Vacancy>{
 	public void setVacancy_url(String vacancy_url) {
 		this.vacancy_url = vacancy_url;
 	}
-	public Integer getCorresponding() {
+	public int getCorresponding() {
 		return corresponding;
 	}
-	public void setCorresponding(Integer corresponding) {
+	public void setCorresponding(int corresponding) {
 		this.corresponding = corresponding;
 	}
 
