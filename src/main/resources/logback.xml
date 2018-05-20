@@ -9,25 +9,50 @@
     
      <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>testFile.log</file>
+    
     <append>true</append>
     <!-- set immediateFlush to false for much higher logging throughput -->
     <immediateFlush>true</immediateFlush>
     <!-- encoders are assigned the type
          ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
     <encoder>
-      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+    <!-- pattern was %-4relative [%thread] %-5level %logger{35} - %msg%n -->
+      <pattern>%msg%n</pattern>
     </encoder>
   </appender>
   
   
   
-    <logger name="com.example.demo.security" level="info"
+  
+  
+  
+      <appender name="FILES" class="ch.qos.logback.core.FileAppender">
+    <file>SitestLog.log</file>
+    
+    <append>true</append>
+    <immediateFlush>true</immediateFlush>
+
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+  
+
+
+
+
+
+	 <logger name="com.demo.example.controllers" level="info"
 		additivity="false">
-		<appender-ref ref="STDOUT" />
+		    <appender-ref ref="STDOUT" />
+		    <appender-ref ref="FILE" />
 		
-	</logger>
+		
+	</logger> 
+	
     <root level="info">
     <appender-ref ref="STDOUT" />
-    <appender-ref ref="FILE" />
+		    <appender-ref ref="FILE" />
     </root>
+    
 </configuration>

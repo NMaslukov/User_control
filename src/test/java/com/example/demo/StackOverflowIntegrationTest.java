@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.entity.Site;
 import com.example.demo.services.StackExchangerService;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(
   webEnvironment = WebEnvironment.RANDOM_PORT,

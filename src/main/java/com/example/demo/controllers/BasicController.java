@@ -1,7 +1,9 @@
 package com.example.demo.controllers;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +24,9 @@ import org.springframework.web.client.RestClientException;
 
 import com.example.demo.auth.TokenService;
 import com.example.demo.entity.Person;
+import com.example.demo.entity.Vacancy;
 import com.example.demo.filters.RedirectFilter;
+import com.example.demo.services.FindJobService;
 import com.example.demo.services.JpaServiceImpl;
 import com.example.demo.services.StackExchangerService;
 
@@ -30,12 +35,15 @@ public class BasicController {
 
 	public static final Logger logger = LoggerFactory.getLogger(BasicController.class);
 	
+	
 	@Autowired
-	StackExchangerService rest;
+	private StackExchangerService rest;
 	
 	@Autowired
 	private JpaServiceImpl service;
 	
+	@Autowired
+	private FindJobService jobService;
 	@GetMapping("/")
 	public String hello() {
 		logger.info("MAPPINT README");
@@ -44,10 +52,10 @@ public class BasicController {
 	
 	@GetMapping(CV.MAPPING_LOGIN)
 	public String LoginPage(
-		@RequestParam(value = CV.PARAM_EROR, required = false) String error,
-		@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
-		@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
-		@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url,
+			@RequestParam(value = CV.PARAM_EROR, required = false) String error,
+			@RequestParam(value = CV.PARAM_NOT_AUTHORITY, required = false) String no_authority,
+			@RequestParam(value = CV.PARAM_NOT_AUTHORIZE, required = false) String not_authorized,
+			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url,
 		Model model) {
 		
 		login_setAttributes(error, no_authority, not_authorized, normalizeURL(target_url), model);
@@ -79,10 +87,10 @@ public class BasicController {
 
 	@PostMapping(CV.MAPPING_LOGIN)
 	public String ProcessLoginData(
-		HttpServletResponse response,
-		@RequestParam(CV.PARAM_PASSWORD) String password,
-		@RequestParam(CV.PARAM_USERNAME) String login,
-		@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url) {
+			HttpServletResponse response,
+			@RequestParam(CV.PARAM_PASSWORD) String password,
+			@RequestParam(CV.PARAM_USERNAME) String login,
+			@RequestParam(value = RedirectFilter.URL_BEFORE_REDIRECT, required = false) String target_url) {
 		
 		if(isLogPassValid(login, password)) {
 			setToken(response, service.getPersonByLogin(login));
@@ -163,4 +171,27 @@ public class BasicController {
 		return "sites_ajaxImpl_service";
 	}
 	
+	@GetMapping("/url/{url}")
+	public String url_test(@PathVariable("url") String url, Model model) throws IOException {
+		
+		List<String> lines = new LinkedList<>();
+	
+		jobService.doGetVacancy(lines, "https://rabota.ua/zapros/"+url);
+		
+		//lines has strings with vacancy name, url and other trash
+		
+		List<Vacancy> vacancy = new ArrayList<>(); 
+		jobService.initList(lines, vacancy);
+		
+		jobService.setPostFromLines(lines, vacancy);
+		jobService.setUrlFromLines(lines,vacancy);
+		
+		jobService.requerments(vacancy);
+		
+		
+		model.addAttribute("vacancy", vacancy);
+		return "url_test";
+		
+	}
+
 }
