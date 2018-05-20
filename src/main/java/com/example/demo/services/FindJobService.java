@@ -22,8 +22,8 @@ public class FindJobService {
 			,"ТРЕБОВАНИЯ","Ожидаем от кандидата","Must have","Необходимые навыки:" 
 			,"техническими навыками","требования","Требования","Ожидаем","ожидаем", "техническими навыками:","Наши пожелания","we expect from"
 			,"Job Requirements","Required skills","Required Skills","Qualifications","Skills:","нам важны:","Вимоги:"
-			,"знання та досвід:"};
-	
+			,"знання та досвід:","a candidate with:"};
+	public static final String req_words_regexp = "Requirements|Main requirements|Вимоги до кандидата|ТРЕБОВАНИЯ|Ожидаем от кандидата|Must have|Необходимые навыки:| техническими навыками|требования|Требования|Ожидаем|ожидаем техническими навыками:|Наши пожелания|we expect from|Job Requirements|Required skills|Required Skills|Qualifications|Skills:|нам важны:|Вимоги:знання та досвід:|a candidate with:";
 	
 	public List<Vacancy> getVacancy(String post) throws IOException, ProtocolException, UnsupportedEncodingException {
 		
@@ -122,12 +122,12 @@ public class FindJobService {
 			
 			while ((inputLine = in.readLine()) != null) {
 				if(inputLine.contains("class=\"d_content\"") ) { //optimized way
-				for (String word : req_words) {
-					if(inputLine.contains(word)) {
+				
+					if(inputLine.matches(req_words_regexp)) {
 						code = inputLine;
 					    break;
 					}
-				}
+				
 			    if(code != null) break;
 			   
 				}
@@ -159,14 +159,14 @@ public class FindJobService {
 			key_word = word;
 			}
 		}
-//		if(key_word.equals("Job Requirements")) { TODO TEST
-//		System.out.println("finded");
-//		System.out.println(target_line);
-//		}
+
+
 		setVacReq(pos,target_line,vac,key_word);
 	
 	}
-
+	/*
+	 * returns 0 if key word -> target_line is null
+	 */
 	public void setVacReq(int pos, String target_line, Vacancy vac, String key_word) {
 		int begin = 0,end = 0;
 		try {
@@ -174,12 +174,17 @@ public class FindJobService {
 	
 			pos = target_line.lastIndexOf(key_word);
 
-			target_line = target_line.substring( pos);
-			 begin = target_line.indexOf("<ul>") ;
-			 end = target_line.indexOf("</ul>");
+			target_line = target_line.substring(pos);
+			begin = target_line.indexOf("<ul>");
+			end = target_line.indexOf("</ul>");
+			
 			if(begin == -1) {
 				begin = target_line.indexOf("<ol>") ;
 				end = target_line.indexOf("</ol>");
+			}
+			if(begin == -1) {
+				begin = target_line.indexOf("<p>") ;
+				end = target_line.indexOf("</div>");
 			}
 			String req = target_line.substring(begin,end);
 	
@@ -194,7 +199,7 @@ public class FindJobService {
 			
 			}catch(Exception e) {
 				System.out.println("some exception with begin = " + begin + "  end = " + end);
-			//	e.printStackTrace();
+			
 			}
 	
 	}
