@@ -81,16 +81,16 @@ public class FindJobService {
 			key_word = word;
 			}
 		}
-		if(key_word.equals("Job Requirements")) {
-		System.out.println("finded");
-		System.out.println(target_line);
-		}
+//		if(key_word.equals("Job Requirements")) { TODO TEST
+//		System.out.println("finded");
+//		System.out.println(target_line);
+//		}
 		setVacReq(pos,target_line,vac,key_word);
 	
 }
 
 	public void setVacReq(int pos, String target_line, Vacancy vac, String key_word) {
-		System.out.println(target_line);
+		
 
 		try {
 			List<String> l = vac.getRequirments();
