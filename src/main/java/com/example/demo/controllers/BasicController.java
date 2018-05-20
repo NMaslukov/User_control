@@ -193,10 +193,10 @@ public class BasicController {
 	}
 	
 	@PostMapping("/sortedVacancy")
-	public String sortedVacancy(@RequestParam("pref") String pref, @RequestParam("url") String url, Model model) {
+	public String sortedVacancy(@RequestParam("pref") String pref, @RequestParam("url") String post, Model model) {
 
 		try {
-			List<Vacancy> vac = jobService.getVacancy(url);
+			List<Vacancy> vac = jobService.getVacancy(post);
 			jobService.setCorresponding(pref, vac);
 
 			Set<Vacancy> vacancy = new TreeSet<>(vac);

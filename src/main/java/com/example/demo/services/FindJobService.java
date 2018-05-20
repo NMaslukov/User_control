@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,32 +18,52 @@ import com.example.demo.entity.Vacancy;
 @Component
 public class FindJobService {
 	
-	public static final String[] req_words = {"Requirements","Main requirements","Требования","Вимоги до кандидата"
+	public static final String[] req_words = {"Requirements","Main requirements","Вимоги до кандидата"
 			,"ТРЕБОВАНИЯ","Ожидаем от кандидата","Must have","Необходимые навыки:" 
 			,"техническими навыками","требования","Требования","Ожидаем","ожидаем", "техническими навыками:","Наши пожелания","we expect from"
-			,"Job Requirements","Required skills","Required Skills","Qualifications"};
+			,"Job Requirements","Required skills","Required Skills","Qualifications","Skills:","нам важны:","Вимоги:"
+			,"знання та досвід:"};
 	
 	
-	public List<Vacancy> getVacancy(String url) throws IOException, ProtocolException, UnsupportedEncodingException {
+	public List<Vacancy> getVacancy(String post) throws IOException, ProtocolException, UnsupportedEncodingException {
 		
-		url = url.replaceAll(" ", "-");
+		post = post.replaceAll(" ", "+");
 		List<String> lines = new LinkedList<>();
 	
-		doGetVacancy(lines, "https://rabota.ua/zapros/"+url);
+		doGetVacancy(lines, "https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords="+post);
 		
 		//lines has strings with vacancy name, url and other trash
 		
-		List<Vacancy> vacancy = new ArrayList<>(); 
-		initList(lines.size(), vacancy);
+		List<Vacancy> vacancies = new ArrayList<>(); 
+		initList(lines.size(), vacancies);
 		
-		setPostFromLines(lines, vacancy);
-		setUrlFromLines(lines,vacancy);
-		setRequerments(vacancy);
+		setPostFromLines(lines, vacancies);
+		setUrlFromLines(lines,vacancies);
+		filter(vacancies,post);
+		setRequerments(vacancies);
 		
-		return vacancy;
+		return vacancies;
 	}
 	
 	
+	private void filter(List<Vacancy> vacancies, String post) {
+		String[] req_post = post.split("\\+");
+		
+		for (Iterator<Vacancy> vac_it = vacancies.iterator();vac_it.hasNext();) {
+			Vacancy vac = vac_it.next();
+			String vac_post = vac.getPost();
+			
+			for (String string : req_post) {
+				if(!vac_post.contains(string)) {
+					vac_it.remove();
+					break;
+				}
+			}
+		}
+		
+	}
+
+
 	public void doGetVacancy(List<String> lines, String s_url) throws IOException, ProtocolException, UnsupportedEncodingException {
 		URL url = new URL(s_url);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -65,8 +86,8 @@ public class FindJobService {
 		}
 	}
 
-	public void setRequerments(List<Vacancy> vacancy) {
-		for (Vacancy vac : vacancy) {
+	public void setRequerments(List<Vacancy> vacancies) {
+		for (Vacancy vac : vacancies) {
 			setRequirments(vac.getVacancy_url(), vac);
 
 		}
@@ -144,42 +165,45 @@ public class FindJobService {
 	}
 
 	public void setVacReq(int pos, String target_line, Vacancy vac, String key_word) {
-
+		int begin = 0,end = 0;
 		try {
 			
 	
 			pos = target_line.lastIndexOf(key_word);
 
 			target_line = target_line.substring( pos);
-			int begin = target_line.indexOf("<ul>");
-			int end = target_line.indexOf("</ul>");
-	
+			 begin = target_line.indexOf("<ul>") ;
+			 end = target_line.indexOf("</ul>");
+			if(begin == -1) {
+				begin = target_line.indexOf("<ol>") ;
+				end = target_line.indexOf("</ol>");
+			}
 			String req = target_line.substring(begin,end);
 	
 			
 			
 			req = req.replaceAll( ";", "").
-					replaceAll("<p>|</p>|</li>|<br>|<li>|<ul>", "");
+					replaceAll("<p>|</p>|</li>|<br>|<li>|<ul>|<ol>", " ");
 
 			
 			vac.setRequirments(req.toLowerCase());
 			
 			
 			}catch(Exception e) {
-				System.out.println("some exception");
+				System.out.println("some exception with begin = " + begin + "  end = " + end);
 			//	e.printStackTrace();
 			}
 	
 	}
 
 
-	public void initList(int size, List<Vacancy> vacancy) {
+	public void initList(int size, List<Vacancy> vacancies) {
 		for(int i = 0; i < size; i++) {
-			vacancy.add(new Vacancy());
+			vacancies.add(new Vacancy());
 		}
 	}
 
-	public void setUrlFromLines(List<String> lines, List<Vacancy> vacancy) {
+	public void setUrlFromLines(List<String> lines, List<Vacancy> vacancies) {
 		List<String> urls = new ArrayList<>();
 		for (String single_line : lines) {
 			int indexOf = single_line.lastIndexOf("href=\"/company");
@@ -188,12 +212,12 @@ public class FindJobService {
 
 		for (int i = 0; i <urls.size();i++) {
 			if(urls.get(i).length() > 50) continue;
-			vacancy.get(i).setVacancy_url("https://rabota.ua/company" + urls.get(i) );
+			vacancies.get(i).setVacancy_url("https://rabota.ua/company" + urls.get(i) );
 		}
 	}
 
 	
-	public void setPostFromLines(List<String> lines, List<Vacancy> vacancy) {
+	public void setPostFromLines(List<String> lines, List<Vacancy> vacancies) {
 		List<String> parsedLines = new LinkedList<>();
 		for (String line : lines) {
 			int lastIndexOf = line.lastIndexOf(">");
@@ -202,19 +226,19 @@ public class FindJobService {
 		}
 		
 		for (int i = 0; i < parsedLines.size();i++) {
-			vacancy.get(i).setPost(parsedLines.get(i));
+			vacancies.get(i).setPost(parsedLines.get(i));
 		}
 		
 	}
 
 
-	public void setCorresponding(String pref, List<Vacancy> vacancy) {
+	public void setCorresponding(String pref, List<Vacancy> vacancies) {
 		pref=pref.toLowerCase().replaceAll("  ", " ");//два пробела уберёт в один
 		
 		String[] prefs = pref.split(";");
 		int prefs_size = prefs.length;
 		///
-		for (Vacancy vac : vacancy) {
+		for (Vacancy vac : vacancies) {
 			
 		int vac_corresp = 0;
 		for (String str : prefs) {
