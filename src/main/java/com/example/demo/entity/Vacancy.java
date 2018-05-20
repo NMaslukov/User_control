@@ -1,16 +1,13 @@
 package com.example.demo.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Vacancy {
+public class Vacancy implements Comparable<Vacancy>{
 	private String  post;
 	private String  vacancy_url;
 	private Integer corresponding;
-	private List<String> requirments;
+	private String requirments;
+	
 	public Vacancy(){
-		requirments = new ArrayList<>();
-		//requirments.add("test in constructor");
+		
 	}
 	public String getPost() {
 		return post;
@@ -30,15 +27,23 @@ public class Vacancy {
 	public void setCorresponding(Integer corresponding) {
 		this.corresponding = corresponding;
 	}
-	public List<String> getRequirments() {
-		return requirments;
-	}
-	public void setRequirments(List<String> requirments) {
-		this.requirments = requirments;
-	}
+
 	@Override
 	public String toString() {
 		return "Vacancy [post=" + post + ", vacancy_url=" + vacancy_url + "]";
+	}
+	public String getRequirments() {
+		return requirments;
+	}
+	public void setRequirments(String requirments) {
+		this.requirments = requirments;
+	}
+	@Override
+	public int compareTo(Vacancy o) {
+		
+		if(this.corresponding >= o.getCorresponding())
+			return -1;
+		else return 1;
 	}
 	
 }

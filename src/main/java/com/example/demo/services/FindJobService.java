@@ -16,10 +16,32 @@ import org.springframework.stereotype.Component;
 import com.example.demo.entity.Vacancy;
 @Component
 public class FindJobService {
+	
 	public static final String[] req_words = {"Requirements","Main requirements","Требования","Вимоги до кандидата"
-			,"ТРЕБОВАНИЯ","Ожидаем от кандидата","Must have" 
+			,"ТРЕБОВАНИЯ","Ожидаем от кандидата","Must have","Необходимые навыки:" 
 			,"техническими навыками","требования","Требования","Ожидаем","ожидаем", "техническими навыками:","Наши пожелания","we expect from"
-			,"Job Requirements","Required skills","Qualifications"};
+			,"Job Requirements","Required skills","Required Skills","Qualifications"};
+	
+	
+	public List<Vacancy> getVacancy(String url) throws IOException, ProtocolException, UnsupportedEncodingException {
+		
+		url = url.replaceAll(" ", "-");
+		List<String> lines = new LinkedList<>();
+	
+		doGetVacancy(lines, "https://rabota.ua/zapros/"+url);
+		
+		//lines has strings with vacancy name, url and other trash
+		
+		List<Vacancy> vacancy = new ArrayList<>(); 
+		initList(lines.size(), vacancy);
+		
+		setPostFromLines(lines, vacancy);
+		setUrlFromLines(lines,vacancy);
+		setRequerments(vacancy);
+		
+		return vacancy;
+	}
+	
 	
 	public void doGetVacancy(List<String> lines, String s_url) throws IOException, ProtocolException, UnsupportedEncodingException {
 		URL url = new URL(s_url);
@@ -37,90 +59,30 @@ public class FindJobService {
 				    if(inputLine.contains("fd-beefy-gunso f-vacancylist-vacancytitle"))lines.add(inputLine);
 				    
 				}
-				
-
 				in.close();
 		}finally {
 			con.disconnect();
 		}
 	}
 
-	public void requerments(List<Vacancy> vacancy) {
+	public void setRequerments(List<Vacancy> vacancy) {
 		for (Vacancy vac : vacancy) {
-			
 			setRequirments(vac.getVacancy_url(), vac);
-			
-			
+
 		}
 		
 	}
 
 	public void setRequirments(String URL, Vacancy vac) {
 		String code = loadVacPage(URL); //optimized or shorten variant
-		
-		
-		
-	//	logger.info(code.toString());
+
 		try {
-		setVacancyRequirments(code,vac);
+			setVacancyRequirments(code,vac);
 		}catch(Exception e) {
 			System.out.println("another error");
 		}
 	}
-
-	public void setVacancyRequirments(String code, Vacancy vac) {
-		int pos = 0;
-		String key_word = null;
-		String target_line = null;
 	
-		for (String word : req_words) {
-			if(code.contains(word)) {
-				
-			pos = code.lastIndexOf(word) + word.length();
-			target_line = code;
-			key_word = word;
-			}
-		}
-//		if(key_word.equals("Job Requirements")) { TODO TEST
-//		System.out.println("finded");
-//		System.out.println(target_line);
-//		}
-		setVacReq(pos,target_line,vac,key_word);
-	
-}
-
-	public void setVacReq(int pos, String target_line, Vacancy vac, String key_word) {
-		
-
-		try {
-			List<String> l = vac.getRequirments();
-	
-			pos = target_line.lastIndexOf(key_word);
-
-			target_line = target_line.substring( pos);
-			int begin = target_line.indexOf("<ul>");
-			int end = target_line.indexOf("</ul>");
-	
-			String to_split = target_line.substring(begin,end);
-			String[] split = to_split.split("</li><li>");
-	
-			
-			for (int i = 0; i < split.length;i++) {
-			split[i] = split[i].replaceAll( "<ul>", "");
-			split[i] = split[i].replaceAll( "<li>", "");
-			split[i] = split[i].replaceAll(  "<p>", "");
-			split[i] = split[i].replaceAll( "<li>", "");
-			split[i] = split[i].replaceAll("</li>", "");//можно и не делать наверно, или за 1 круг своей функцией
-			l.add(split[i]);
-			}
-	
-			}catch(Exception e) {
-				System.out.println("some exception");
-				e.printStackTrace();
-			}
-	
-}
-
 	private String loadVacPage(String URL) {
 		String code = null;
 		HttpURLConnection con = null;
@@ -155,15 +117,64 @@ public class FindJobService {
 		}finally {
 			con.disconnect();
 		}
-		if(code == null) {
-		return content.toString(); // если не получилось выдернуть оптимизированный вариант
-		
-		}
-		return code;
-		}
+		if(code == null) return content.toString(); // если не получилось выдернуть оптимизированный вариант, то передаю целый файл
 
-	public void initList(List<String> lines, List<Vacancy> vacancy) {
-		for(int i = 0; i < lines.size(); i++) {
+		return code;
+	}
+	
+	public void setVacancyRequirments(String code, Vacancy vac) {
+		int pos = 0;
+		String key_word = null;
+		String target_line = null;
+	
+		for (String word : req_words) {
+			if(code.contains(word)) {
+				
+			pos = code.lastIndexOf(word) + word.length();
+			target_line = code;
+			key_word = word;
+			}
+		}
+//		if(key_word.equals("Job Requirements")) { TODO TEST
+//		System.out.println("finded");
+//		System.out.println(target_line);
+//		}
+		setVacReq(pos,target_line,vac,key_word);
+	
+	}
+
+	public void setVacReq(int pos, String target_line, Vacancy vac, String key_word) {
+
+		try {
+			
+	
+			pos = target_line.lastIndexOf(key_word);
+
+			target_line = target_line.substring( pos);
+			int begin = target_line.indexOf("<ul>");
+			int end = target_line.indexOf("</ul>");
+	
+			String req = target_line.substring(begin,end);
+	
+			
+			
+			req = req.replaceAll( ";", "").
+					replaceAll("<p>|</p>|</li>|<br>|<li>|<ul>", "");
+
+			
+			vac.setRequirments(req.toLowerCase());
+			
+			
+			}catch(Exception e) {
+				System.out.println("some exception");
+			//	e.printStackTrace();
+			}
+	
+	}
+
+
+	public void initList(int size, List<Vacancy> vacancy) {
+		for(int i = 0; i < size; i++) {
 			vacancy.add(new Vacancy());
 		}
 	}
@@ -174,10 +185,7 @@ public class FindJobService {
 			int indexOf = single_line.lastIndexOf("href=\"/company");
 			urls.add(single_line.substring(indexOf + "href=\"/company".length(),single_line.lastIndexOf("\">")));
 		}
-		if(urls.size() != vacancy.size()) {
-			System.out.println("ERRRRRROOOOOOOOOR");
-			return;
-		}
+
 		for (int i = 0; i <urls.size();i++) {
 			if(urls.get(i).length() > 50) continue;
 			vacancy.get(i).setVacancy_url("https://rabota.ua/company" + urls.get(i) );
@@ -198,4 +206,26 @@ public class FindJobService {
 		}
 		
 	}
+
+
+	public void setCorresponding(String pref, List<Vacancy> vacancy) {
+		pref=pref.toLowerCase().replaceAll("  ", " ");//два пробела уберёт в один
+		
+		String[] prefs = pref.split(";");
+		int prefs_size = prefs.length;
+		///
+		for (Vacancy vac : vacancy) {
+			
+		int vac_corresp = 0;
+		for (String str : prefs) {
+			if(vac.getRequirments() != null && vac.getRequirments().contains(str))vac_corresp++;
+			
+		}
+		int corresponding = vac_corresp*100/prefs_size;
+		vac.setCorresponding(corresponding);
+		}
+		
+	}
+	
+	
 }

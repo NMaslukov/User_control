@@ -3,8 +3,9 @@ package com.example.demo.controllers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -174,19 +175,7 @@ public class BasicController {
 	@GetMapping("/url/{url}")
 	public String url_test(@PathVariable("url") String url, Model model) throws IOException {
 		
-		List<String> lines = new LinkedList<>();
-	
-		jobService.doGetVacancy(lines, "https://rabota.ua/zapros/"+url);
-		
-		//lines has strings with vacancy name, url and other trash
-		
-		List<Vacancy> vacancy = new ArrayList<>(); 
-		jobService.initList(lines, vacancy);
-		
-		jobService.setPostFromLines(lines, vacancy);
-		jobService.setUrlFromLines(lines,vacancy);
-		
-		jobService.requerments(vacancy);
+		List<Vacancy> vacancy = jobService.getVacancy(url);
 		
 		
 		model.addAttribute("vacancy", vacancy);
@@ -194,4 +183,29 @@ public class BasicController {
 		
 	}
 
+	@GetMapping("/inputVacData")
+	public String inputPreferences(Model model) throws IOException {
+		
+		
+		
+		return "input_pref";
+		
+	}
+	
+	@PostMapping("/sortedVacancy")
+	public String sortedVacancy(@RequestParam("pref") String pref, @RequestParam("url") String url, Model model) {
+
+		try {
+			List<Vacancy> vac = jobService.getVacancy(url);
+			jobService.setCorresponding(pref, vac);
+
+			Set<Vacancy> vacancy = new TreeSet<>(vac);
+			model.addAttribute("vacancy", vacancy);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return "sorted_vac";
+	}
 }
