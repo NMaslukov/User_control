@@ -25,7 +25,7 @@ public class FindJobService {
 			,"знання та досвід:","a candidate with:"};
 	public static final String req_words_regexp = "Requirements|Main requirements|Вимоги до кандидата|ТРЕБОВАНИЯ|Ожидаем от кандидата|Must have|Необходимые навыки:| техническими навыками|требования|Требования|Ожидаем|ожидаем техническими навыками:|Наши пожелания|we expect from|Job Requirements|Required skills|Required Skills|Qualifications|Skills:|нам важны:|Вимоги:знання та досвід:|a candidate with:";
 	
-	public List<Vacancy> getVacancy(String post) throws IOException, ProtocolException, UnsupportedEncodingException {
+	public List<Vacancy> getVacancyList(String post) throws IOException, ProtocolException, UnsupportedEncodingException {
 		
 		post = post.replaceAll(" ", "+");
 		List<String> lines = new LinkedList<>();

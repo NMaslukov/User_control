@@ -175,7 +175,7 @@ public class BasicController {
 	@GetMapping("/url/{url}")
 	public String url_test(@PathVariable("url") String url, Model model) throws IOException {
 		
-		List<Vacancy> vacancy = jobService.getVacancy(url);
+		List<Vacancy> vacancy = jobService.getVacancyList(url);
 		
 		
 		model.addAttribute("vacancy", vacancy);
@@ -185,18 +185,14 @@ public class BasicController {
 
 	@GetMapping("/inputVacData")
 	public String inputPreferences(Model model) throws IOException {
-		
-		
-		
-		return "input_pref";
-		
+		return "input_pref";	
 	}
 	
 	@PostMapping("/sortedVacancy")
 	public String sortedVacancy(@RequestParam("pref") String pref, @RequestParam("url") String post, Model model) {
 
 		try {
-			List<Vacancy> vac = jobService.getVacancy(post);
+			List<Vacancy> vac = jobService.getVacancyList(post);
 			jobService.setCorresponding(pref, vac);
 
 			Set<Vacancy> vacancy = new TreeSet<>(vac);
